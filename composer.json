@@ -1,0 +1,19 @@
+{
+	"name": "thrail/crm",
+    "description": "A plugin for Crm",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Sadekur Rahman",
+            "email": "shadekur.rahman60@gmail.com"
+        }
+    ],
+    "require": {},
+	"autoload": {
+        "psr-4": {
+            "Thrail\\Crm\\": "includes/"
+        },
+        "files": [ "includes/functions.php" ]
+    }
+}
