@@ -11,7 +11,7 @@ class Shortcode {
      * Initializes the class
      */
     function __construct() {
-        add_shortcode( 'thrail-crm', [ $this, 'render_shortcode' ] );
+        add_shortcode( 'thrail-crm', [ $this, 'optin_form' ] );
     }
 
     /**
@@ -22,10 +22,16 @@ class Shortcode {
      *
      * @return string
      */
-    public function render_shortcode( $atts, $content = '' ) {
-        wp_enqueue_script( 'thrail-script' );
-        wp_enqueue_style( 'thrail-style' );
+    public function optin_form( $atts ) {
+        // wp_enqueue_script( 'thrail-script' );
+        // wp_enqueue_style( 'thrail-style' );
 
-        return '<div class="academy-shortcode">Hello from Shortcode</div>';
-    }
+    $atts = shortcode_atts(
+        array(
+            'foo' => 'no foo',
+            'bar' => 'default bar',
+        ), $atts, 'bartag' );
+
+    return 'bartag: ' . esc_html( $atts['foo'] ) . ' ' . esc_html( $atts['bar'] );
+}
 }

@@ -2,96 +2,98 @@
 
 namespace Thrail\Crm;
 
-/**
- * Assets handlers class
- */
 class Assets {
 
-    /**
-     * Class constructor
-     */
-    function __construct() {
-        add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
-        add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ] );
-    }
+	public $plugin;
+	public $slug;
+	public $name;
+	public $version;
+	public $assets;
 
-    /**
-     * All available scripts
-     *
-     * @return array
-     */
-    public function get_scripts() {
-        return [
-            'thrail-script' => [
-                'src'     => THRAIL_CRM_ASSETS . '/js/frontend.js',
-                'version' => filemtime( THRAIL_CRM_PATH . '/assets/js/frontend.js' ),
-                'deps'    => [ 'jquery' ]
-            ],
-            'thrail-enquiry-script' => [
-                'src'     => THRAIL_CRM_ASSETS . '/js/enquiry.js',
-                'version' => filemtime( THRAIL_CRM_PATH . '/assets/js/enquiry.js' ),
-                'deps'    => [ 'jquery' ]
-            ],
-            'thrail-admin-script' => [
-                'src'     => THRAIL_CRM_ASSETS . '/js/admin.js',
-                'version' => filemtime( THRAIL_CRM_PATH . '/assets/js/admin.js' ),
-                'deps'    => [ 'jquery', 'wp-util' ]
-            ],
-        ];
-    }
+	function __construct() {
+		$this->plugin	= $plugin;
+		$this->slug		= $this->plugin['TextDomain'];
+		$this->name		= $this->plugin['Name'];
+		$this->version	= $this->plugin['Version'];
+		$this->assets 	= THRAIL_CRM_ASSETS;
 
-    /**
-     * All available styles
-     *
-     * @return array
-     */
-    public function get_styles() {
-        return [
-            'thrail-style' => [
-                'src'     => THRAIL_CRM_ASSETS . '/css/frontend.css',
-                'version' => filemtime( THRAIL_CRM_PATH . '/assets/css/frontend.css' )
-            ],
-            'thrail-admin-style' => [
-                'src'     => THRAIL_CRM_ASSETS . '/css/admin.css',
-                'version' => filemtime( THRAIL_CRM_PATH . '/assets/css/admin.css' )
-            ],
-            'thrail-enquiry-style' => [
-                'src'     => THRAIL_CRM_ASSETS . '/css/enquiry.css',
-                'version' => filemtime( THRAIL_CRM_PATH . '/assets/css/enquiry.css' )
-            ],
-        ];
-    }
+		add_action('wp_enqueue_scripts', [$this, 'register_frontend_assets']);
+		add_action('admin_enqueue_scripts', [$this, 'register_admin_assets']);
+	}
 
-    /**
-     * Register scripts and styles
-     *
-     * @return void
-     */
-    public function register_assets() {
-        $scripts = $this->get_scripts();
-        $styles  = $this->get_styles();
+	public function get_scripts() {
+		return [
+			'thrail-script' => [
+				'src'     => $this->assets . '/js/frontend.js',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/frontend.js'),
+				'deps'    => ['jquery']
+			],
+			'thrail-enquiry-script' => [
+				'src'     => $this->assets . '/js/enquiry.js',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/enquiry.js'),
+				'deps'    => ['jquery']
+			],
+			'thrail-admin-script' => [
+				'src'     => $this->assets . '/js/admin.js',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/admin.js'),
+				'deps'    => ['jquery', 'wp-util']
+			],
+		];
+	}
 
-        foreach ( $scripts as $handle => $script ) {
-            $deps = isset( $script['deps'] ) ? $script['deps'] : false;
+	public function get_styles() {
+		return [
+			'thrail-style' => [
+				'src'     => $this->assets . '/css/frontend.css',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/frontend.css')
+			],
+			'thrail-admin-style' => [
+				'src'     => $this->assets . '/css/admin.css',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/admin.css')
+			],
+			'thrail-enquiry-style' => [
+				'src'     => $this->assets . '/css/enquiry.css',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/enquiry.css')
+			],
+		];
+	}
 
-            wp_register_script( $handle, $script['src'], $deps, $script['version'], true );
-        }
+	public function register_frontend_assets() {
+		$scripts = $this->get_scripts();
+		$styles = $this->get_styles();
 
-        foreach ( $styles as $handle => $style ) {
-            $deps = isset( $style['deps'] ) ? $style['deps'] : false;
+		wp_register_script('thrail-script', $scripts['thrail-script']['src'], $scripts['thrail-script']['deps'], $scripts['thrail-script']['version'], true);
+		wp_register_script('thrail-enquiry-script', $scripts['thrail-enquiry-script']['src'], $scripts['thrail-enquiry-script']['deps'], $scripts['thrail-enquiry-script']['version'], true);
+		wp_localize_script('thrail-enquiry-script', 'THRAIL', [
+			'ajaxurl' => admin_url('admin-ajax.php'),
+			'nonce'   => wp_create_nonce('thrail-admin-nonce'),
+			'error'   => __('Something went wrong', 'thrail-crm')
+		]);
 
-            wp_register_style( $handle, $style['src'], $deps, $style['version'] );
-        }
+		wp_register_style('thrail-style', $styles['thrail-style']['src'], [], $styles['thrail-style']['version']);
+		wp_register_style('thrail-enquiry-style', $styles['thrail-enquiry-style']['src'], [], $styles['thrail-enquiry-style']['version']);
 
-        // wp_localize_script( 'thrail-enquiry-script', 'THRAIL', [
-        //     'ajaxurl' => admin_url( 'admin-ajax.php' ),
-        //     'error'   => __( 'Something went wrong', 'thrail-crm' ),
-        // ] );
+		wp_enqueue_script('thrail-script');
+		wp_enqueue_script('thrail-enquiry-script');
+		wp_enqueue_style('thrail-style');
+		wp_enqueue_style('thrail-enquiry-style');
+	}
 
-        wp_localize_script( 'thrail-admin-script', 'THRAIL', [
-            'nonce' => wp_create_nonce( 'thrail-admin-nonce' ),
-            'confirm' => __( 'Are you sure?', 'thrail-crm' ),
-            'error' => __( 'Something went wrong', 'thrail-crm' ),
-        ] );
-    }
+	public function register_admin_assets() {
+		$scripts = $this->get_scripts();
+		$styles = $this->get_styles();
+
+		wp_register_script('thrail-admin-script', $scripts['thrail-admin-script']['src'], $scripts['thrail-admin-script']['deps'], $scripts['thrail-admin-script']['version'], true);
+		wp_localize_script('thrail-admin-script', 'THRAIL', [
+			'nonce'   => wp_create_nonce('thrail-admin-nonce'),
+			'confirm' => __('Are you sure?', 'thrail-crm'),
+			'ajaxurl' => admin_url('admin-ajax.php'),
+			'error'   => __('Something went wrong', 'thrail-crm')
+		]);
+
+		wp_register_style('thrail-admin-style', $styles['thrail-admin-style']['src'], [], $styles['thrail-admin-style']['version']);
+
+		wp_enqueue_script('thrail-admin-script');
+		wp_enqueue_style('thrail-admin-style');
+	}
 }
