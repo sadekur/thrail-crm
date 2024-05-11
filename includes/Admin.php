@@ -11,13 +11,8 @@ class Admin {
      * Initialize the class
      */
     function __construct() {
-        echo 'string';
 
-        // $addressbook = new Admin\Addressbook();
-
-        // $this->dispatch_actions( $addressbook );
-
-        // new Admin\Menu( $addressbook );
+        new Admin\Menu();
     }
 
     /**
