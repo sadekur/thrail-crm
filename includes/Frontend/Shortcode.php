@@ -4,28 +4,21 @@ namespace Thrail\Crm\Frontend;
 
 class Shortcode {
 
-    function __construct() {
-        add_shortcode('thrail-crm', [$this, 'optin_form']);
-    }
+	function __construct() {
+		add_shortcode('thrail-crm', [$this, 'optin_form']);
+	}
 
-    public function optin_form($atts) {
-        wp_enqueue_script( 'thrail-script' );
-        wp_enqueue_style( 'thrail-style' );
-        $atts = shortcode_atts(
-            array(
-                'name' => 'Shadekur',
-                'email' => 'shadekur.rahman60@gmail.com',
-            ), $atts, 'thrail-crm'
-        );
+	public function optin_form($atts) {
+		wp_enqueue_script( 'thrail-script' );
+		wp_enqueue_style( 'thrail-style' );
+		$form_html = '<form id="thrailOptinForm" action="" method="post">
+		<label for="name">Name:</label><br>
+		<input type="text" id="name" name="name" placeholder="Enter your name"><br>
+		<label for="email">Email:</label><br>
+		<input type="email" id="email" name="email" placeholder="Enter your email"><br>
+		<input type="submit" value="Subscribe">
+		</form>';
 
-        ob_start();
-        ?>
-        <form id="thrailOptinForm" method="post">
-            <input type="text" name="name" placeholder="Enter Name" value="" />
-            <input type="email" name="email" placeholder="Enter Email" value="" />
-            <input type="submit" value="Subscribe" />
-        </form>
-        <?php
-        return ob_get_clean();
-    }
+		return $form_html;
+	}
 }

@@ -11,11 +11,11 @@ class Assets {
 	public $assets;
 
 	function __construct() {
-		$this->plugin	= $plugin;
-		$this->slug		= $this->plugin['TextDomain'];
-		$this->name		= $this->plugin['Name'];
-		$this->version	= $this->plugin['Version'];
-		$this->assets 	= THRAIL_CRM_ASSETS;
+		// $this->plugin	= $plugin;
+		// $this->slug		= $this->plugin['TextDomain'];
+		// $this->name		= $this->plugin['Name'];
+		// $this->version	= $this->plugin['Version'];
+		// $this->assets 	= THRAIL_CRM_ASSETS;
 
 		add_action('wp_enqueue_scripts', [$this, 'register_frontend_assets']);
 		add_action('admin_enqueue_scripts', [$this, 'register_admin_assets']);
@@ -24,17 +24,17 @@ class Assets {
 	public function get_scripts() {
 		return [
 			'thrail-script' => [
-				'src'     => $this->assets . '/js/frontend.js',
+				'src'     => THRAIL_CRM_ASSETS . '/js/frontend.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/frontend.js'),
 				'deps'    => ['jquery']
 			],
 			'thrail-enquiry-script' => [
-				'src'     => $this->assets . '/js/enquiry.js',
+				'src'     => THRAIL_CRM_ASSETS . '/js/enquiry.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/enquiry.js'),
 				'deps'    => ['jquery']
 			],
 			'thrail-admin-script' => [
-				'src'     => $this->assets . '/js/admin.js',
+				'src'     => THRAIL_CRM_ASSETS . '/js/admin.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/admin.js'),
 				'deps'    => ['jquery', 'wp-util']
 			],
