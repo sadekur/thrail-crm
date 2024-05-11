@@ -24,17 +24,17 @@ class Assets {
 	public function get_scripts() {
 		return [
 			'thrail-script' => [
-				'src'     => $this->assets . '/js/frontend.js',
+				'src'     => THRAIL_CRM_ASSETS . '/js/frontend.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/frontend.js'),
 				'deps'    => ['jquery']
 			],
 			'thrail-enquiry-script' => [
-				'src'     => $this->assets . '/js/enquiry.js',
+				'src'     => THRAIL_CRM_ASSETS . '/js/enquiry.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/enquiry.js'),
 				'deps'    => ['jquery']
 			],
 			'thrail-admin-script' => [
-				'src'     => $this->assets . '/js/admin.js',
+				'src'     =>THRAIL_CRM_ASSETS . '/js/admin.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/admin.js'),
 				'deps'    => ['jquery', 'wp-util']
 			],
