@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-	$('#thrailOptinForm').on('submit', function(event) {
+	$('#thrailOptinForm').submit(function(event) {
 		event.preventDefault();
 
 		var name = $("#name").val();
@@ -18,12 +18,34 @@ jQuery(document).ready(function($) {
 		        email: email,
 		        nonce: nonce
 		    },
+		    dataType: 'JSON',
 		    success: function(response) {
-		        alert('Data submitted successfully!');
+		        console.log(response);
 		    },
 		    error: function(response) {
-		        alert('Failed to submit data.');
+		        console.log(response);
 		    }
 		});
 	});
+
+	// $(document).on( 'submit', '#thrailOptinForm', function(e) {
+	// 	e.preventDefault();
+
+
+	// 	var $form = $(this);
+
+	// 	var $data = $form.serialize();
+
+	// 	$.ajax({
+	// 	    url: THRAIL.ajaxurl,
+	// 		data: $data,
+	// 		type: 'POST',
+	// 		dataType: 'JSON',
+	// 		success: function(resp){
+	// 			// console.log(resp);
+	// 		},
+	// 		error: function( $xhr, $sts, $err ) {
+	// 		}
+	// 	})
+	// })
 });
