@@ -11,11 +11,11 @@ class Assets {
 	public $assets;
 
 	function __construct() {
-		$this->plugin	= $plugin;
-		$this->slug		= $this->plugin['TextDomain'];
-		$this->name		= $this->plugin['Name'];
-		$this->version	= $this->plugin['Version'];
-		$this->assets 	= THRAIL_CRM_ASSETS;
+		// $this->plugin	= $plugin;
+		// $this->slug		= $this->plugin['TextDomain'];
+		// $this->name		= $this->plugin['Name'];
+		// $this->version	= $this->plugin['Version'];
+		// $this->assets 	= THRAIL_CRM_ASSETS;
 
 		add_action('wp_enqueue_scripts', [$this, 'register_frontend_assets']);
 		add_action('admin_enqueue_scripts', [$this, 'register_admin_assets']);
