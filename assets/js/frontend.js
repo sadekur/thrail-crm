@@ -1,14 +1,10 @@
 jQuery(document).ready(function($) {
 	$('#thrailOptinForm').submit(function(event) {
-		alert('message?: DOMString')
 		event.preventDefault();
 
 		var name = $("#name").val();
 		var email = $("#email").val();
 		var nonce = THRAIL.nonce;
-		console.log(name);
-		console.log(email);
-		console.log(nonce);
 
 		$.ajax({
 		    url: THRAIL.ajaxurl,
