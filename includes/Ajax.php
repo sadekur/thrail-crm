@@ -1,6 +1,7 @@
 <?php
 
 namespace Thrail\Crm;
+use Thrail\Crm\Helper;
 
 class Ajax {
 
@@ -26,7 +27,17 @@ class Ajax {
 			$email = sanitize_email( $_POST['email'] );
 
 			global $wpdb;
+			update_option('sdadd', $wpdb);
 			$table_name = $wpdb->prefix . 'thrail_crm_leads';
+
+			$email_exists = $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM $table_name WHERE email = %s",
+                $email
+            ));
+            if ($email_exists) {
+                wp_send_json_error(['message' => 'This email is already registered.']);
+                return;
+           	}
 
 			$wpdb->insert(
 				$table_name,

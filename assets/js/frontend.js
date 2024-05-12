@@ -21,7 +21,11 @@ jQuery(document).ready(function($) {
 		    },
 		    dataType: 'JSON',
 		    success: function(response) {
-		        console.log(response);
+		         if(response.success) {
+                    alert(response.data.message);
+                } else {
+                    alert(response.data.message);
+                }
 		    },
 		    error: function(response) {
 		        console.log(response);

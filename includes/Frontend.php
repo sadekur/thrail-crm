@@ -1,6 +1,7 @@
 <?php
 
 namespace Thrail\Crm;
+use Thrail\Crm\Helper;
 
 /**
  * Frontend handler class
@@ -13,6 +14,8 @@ class Frontend {
     function __construct() {
         // var_dump(THRAIL_CRM_ASSETS);
         new Frontend\Shortcode();
-        // new Frontend\Enquiry();
+            global $wpdb;
+            // Helper::pri($wpdb);
+           print_r($wpdb);
     }
 }
