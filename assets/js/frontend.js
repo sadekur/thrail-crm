@@ -1,5 +1,6 @@
 jQuery(document).ready(function($) {
 	$('#thrailOptinForm').submit(function(event) {
+		alert('message?: DOMString')
 		event.preventDefault();
 
 		var name = $("#name").val();
