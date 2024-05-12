@@ -10,7 +10,16 @@ class Ajax {
 	}
 
 	public function handle_form_submission() {
-		check_ajax_referer('thrail-admin-nonce', 'nonce');
+		// check_ajax_referer('thrail-admin-nonce', 'nonce');
+
+		$response = [
+			 'status'	=> 0,
+			 'message'	=>__( 'Unauthorized!', 'codesigner' )
+		];
+
+		if( !wp_verify_nonce( $_POST['nonce'], 'thrail-admin-nonce' ) ) {
+		    wp_send_json( $response );
+		}
 
 		if ( isset( $_POST['name'] ) && isset( $_POST['email'] ) ) {
 			$name = sanitize_text_field( $_POST['name'] );

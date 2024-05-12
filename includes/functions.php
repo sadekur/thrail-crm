@@ -25,10 +25,11 @@ if( ! function_exists( 'thrail_crm_activate' ) ) :
 		dbDelta($sql);
 	}
 endif;
+if (! function_exists('thrail_crm_activate')) :
 function thrail_crm_deactivate() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'thrail_crm_leads';
-
     $sql = "DROP TABLE IF EXISTS $table_name;";
     $wpdb->query($sql);
 }
+endif;

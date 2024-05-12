@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 register_activation_hook(__FILE__, 'thrail_crm_activate');
-register_deactivation_hook(__FILE__, 'thrail_crm_activate');
+register_deactivation_hook(__FILE__, 'thrail_crm_deactivate');
 
 /**
  * The main plugin class
