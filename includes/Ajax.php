@@ -38,17 +38,27 @@ class Ajax {
 				return;
 			}
 
-			$wpdb->insert(
+			$inserted = $wpdb->insert(
 				$table_name,
-				[
-					'name' => $name,
-					'email' => $email
-				]
+				['name' => $name, 'email' => $email],
+				['%s', '%s']
 			);
 
-			wp_send_json_success(['message' => 'Thank you for subscribing!']);
-		} else {
-			wp_send_json_error(['message' => 'Required fields are missing.']);
+			if ( $inserted ) {
+				send_congratulatory_email($name, $email);
+
+				wp_send_json_success(['message' => __('Thank you for subscribing!', 'codesigner')]);
+			} else {
+				wp_send_json_error(['message' => __('Failed to register. Please try again.', 'codesigner')]);
+			}
 		}
 	}
+
+	// private function send_congratulatory_email( $name, $email ) {
+	// 	$subject = "Congratulations on subscribing!";
+	// 	$message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
+	// 	$headers = ['Content-Type: text/plain; charset=UTF-8'];
+
+	// 	wp_mail( $email, $subject, $message, $headers );
+	// }
 }

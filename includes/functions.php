@@ -25,11 +25,21 @@ if( ! function_exists( 'thrail_crm_activate' ) ) :
 		dbDelta($sql);
 	}
 endif;
-if (! function_exists('thrail_crm_activate')) :
+if ( ! function_exists( 'thrail_crm_activate' ) ) :
 function thrail_crm_deactivate() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'thrail_crm_leads';
     $sql = "DROP TABLE IF EXISTS $table_name;";
     $wpdb->query($sql);
 }
+endif;
+
+if ( ! function_exists( 'send_congratulatory_email' ) ):
+	function send_congratulatory_email( $name, $email ) {
+		$subject = "Congratulations on subscribing!";
+		$message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
+		$headers = ['Content-Type: text/plain; charset=UTF-8'];
+
+		wp_mail( $email, $subject, $message, $headers );
+	}
 endif;
