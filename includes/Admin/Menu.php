@@ -2,29 +2,70 @@
 
 namespace Thrail\Crm\Admin;
 
-/**
- * The Menu handler class
- */
-class Menu {
+if (!class_exists('WP_List_Table')) {
+    require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
+}
 
-    public $addressbook;
-
-    /**
-     * Initialize the class
-     */
-    function __construct( ) {
-
-        add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+class Leads_List_Table extends \WP_List_Table {
+    function __construct() {
+        parent::__construct([
+            'singular' => 'lead',
+            'plural'   => 'leads',
+            'ajax'     => false
+        ]);
     }
 
-    /**
-     * Register admin menu
-     *
-     * @return void
-     */
-     public function admin_menu() {
-        // Add top-level menu page
-        add_menu_page(
+    public function get_columns() {
+        return [
+            'cb'      => '<input type="checkbox" />',
+            'name'    => __('Name', 'thrail-crm'),
+            'email'   => __('Email', 'thrail-crm'),
+            'actions' => __('Actions', 'thrail-crm'),
+        ];
+    }
+
+    public function column_default($item, $column_name) {
+        switch($column_name) {
+            case 'actions':
+            return sprintf(
+                '<a href="#" class="edit-lead" data-id="%s">Edit</a> | <a href="#" class="delete-lead" data-id="%s">Delete</a>',
+                $item['id'], $item['id']
+            );
+            default:
+            return isset($item[$column_name]) ? $item[$column_name] : 'Not set';
+        }
+    }
+
+    public function prepare_items() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'thrail_crm_leads';
+
+        $per_page = 10;
+        $current_page = $this->get_pagenum();
+        $total_items = $wpdb->get_var("SELECT COUNT(id) FROM $table_name");
+
+        $this->set_pagination_args([
+            'total_items' => $total_items,
+            'per_page'    => $per_page
+        ]);
+
+        $this->items = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM $table_name LIMIT %d OFFSET %d;",
+            $per_page,
+            ($current_page - 1) * $per_page
+        ), ARRAY_A);
+    }
+}
+
+class Menu {
+    private $leads_list_table;
+
+    function __construct() {
+        add_action('admin_menu', [$this, 'admin_menu']);
+    }
+
+    public function admin_menu() {
+        $hook = add_menu_page(
             'Thrail CRM',
             'Thrail CRM',
             'manage_options',
@@ -33,32 +74,18 @@ class Menu {
             'dashicons-businessman'
         );
 
-        // Add submenu page
-        add_submenu_page(
-            'thrail-crm',
-            'Manage Leads',
-            'Manage Leads',
-            'manage_options',
-            'thrail-crm-leads',
-            [$this, 'leads_page']
-        );
+        add_action("load-$hook", [$this, 'screen_option']);
     }
 
-    /**
-     * Callback for the main CRM page content
-     *
-     * @return void
-     */
+    public function screen_option() {
+        $this->leads_list_table = new Leads_List_Table();
+    }
+
     public function crm_page() {
-        echo '<div class="wrap"><h1>Thrail CRM Dashboard</h1><p>Welcome to Thrail CRM.</p></div>';
-    }
-
-    /**
-     * Callback for the leads management page content
-     *
-     * @return void
-     */
-    public function leads_page() {
-        echo '<div class="wrap"><h1>Manage Leads</h1><p>Here you can manage your leads.</p></div>';
+        echo '<div class="wrap"><h1 class="wp-heading-inline">Leads</h1>';
+        $this->leads_list_table->prepare_items();
+        $this->leads_list_table->display();
+        echo '</div>';
     }
 }
+
