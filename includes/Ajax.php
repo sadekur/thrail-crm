@@ -33,6 +33,7 @@ class Ajax {
 				"SELECT COUNT(*) FROM $table_name WHERE email = %s",
 				$email
 			));
+			update_option('dsfew', $email_exists);
 			if ( $email_exists ) {
 				wp_send_json_error(['message' => 'This email is already registered.']);
 				return;
@@ -45,7 +46,7 @@ class Ajax {
 			);
 
 			if ( $inserted ) {
-				send_congratulatory_email($name, $email);
+				send_congratulatory_email( $name, $email );
 
 				wp_send_json_success(['message' => __('Thank you for subscribing!', 'codesigner')]);
 			} else {
