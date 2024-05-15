@@ -7,7 +7,9 @@ class Ajax {
 
 	function __construct() {
 		add_action('wp_ajax_thrail_form', [$this, 'handle_form_submission']); 
-		add_action('wp_ajax_nopriv_thrail_form', [$this, 'handle_form_submission']); 
+		add_action('wp_ajax_nopriv_thrail_form', [$this, 'handle_form_submission']);
+		add_action('wp_ajax_delete_lead', [$this, 'delete_lead']);
+		add_action('wp_ajax_update_lead', [$this, 'update_lead']);
 	}
 
 	public function handle_form_submission() {
@@ -55,11 +57,54 @@ class Ajax {
 		}
 	}
 
-	// private function send_congratulatory_email( $name, $email ) {
-	// 	$subject = "Congratulations on subscribing!";
-	// 	$message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
-	// 	$headers = ['Content-Type: text/plain; charset=UTF-8'];
+	public function delete_lead() {
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Unauthorized access']);
+			return;
+		}
 
-	// 	wp_mail( $email, $subject, $message, $headers );
-	// }
+		$lead_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+		if (!$lead_id) {
+			wp_send_json_error(['message' => 'Lead ID is missing']);
+			return;
+		}
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'thrail_crm_leads';
+		if ($wpdb->delete($table_name, ['id' => $lead_id], ['%d'])) {
+			wp_send_json_success(['message' => 'Lead successfully deleted']);
+		} else {
+			wp_send_json_error(['message' => 'Failed to delete lead']);
+		}
+	}
+
+	public function update_lead() {
+		check_ajax_referer('thrail-front-nonce', 'nonce');
+
+		$response = [
+			 'status'	=> 0,
+			 'message'	=>__( 'Unauthorized!', 'thrail-crm' )
+		];
+
+		if( !wp_verify_nonce( $_POST['nonce'], 'thrail-front-nonce' ) ) {
+			wp_send_json( $response );
+		}
+
+		$lead_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+		$name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+		$email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+
+		if (!$lead_id || !$name || !$email) {
+			wp_send_json_error(['message' => 'Missing or incorrect data']);
+			return;
+		}
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'thrail_crm_leads';
+		if ($wpdb->update($table_name, ['name' => $name, 'email' => $email], ['id' => $lead_id], ['%s', '%s'], ['%d'])) {
+			wp_send_json_success(['message' => 'Lead successfully updated']);
+		} else {
+			wp_send_json_error(['message' => 'Failed to update lead']);
+		}
+	}
 }

@@ -90,7 +90,7 @@ class Assets {
 		wp_register_script('thrail-admin-script', $scripts['thrail-admin-script']['src'], $scripts['thrail-admin-script']['deps'], $scripts['thrail-admin-script']['version'], true);
 		
 		wp_localize_script('thrail-admin-script', 'THRAIL', [
-			'nonce'   => wp_create_nonce('thrail-admin-nonce'),
+			'nonce'   => wp_create_nonce('thrail-front-nonce'),
 			'confirm' => __('Are you sure?', 'thrail-crm'),
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'error'   => __('Something went wrong', 'thrail-crm')
