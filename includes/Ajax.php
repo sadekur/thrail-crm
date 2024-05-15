@@ -79,32 +79,45 @@ class Ajax {
 	}
 
 	public function update_lead() {
-		check_ajax_referer('thrail-front-nonce', 'nonce');
+    check_ajax_referer('thrail-front-nonce', 'nonce');
 
-		$response = [
-			 'status'	=> 0,
-			 'message'	=>__( 'Unauthorized!', 'thrail-crm' )
-		];
+    $response = [
+        'status'  => 0,
+        'message' => __('Unauthorized!', 'thrail-crm')
+    ];
 
-		if( !wp_verify_nonce( $_POST['nonce'], 'thrail-front-nonce' ) ) {
-			wp_send_json( $response );
-		}
+    if (!wp_verify_nonce($_POST['nonce'], 'thrail-front-nonce')) {
+        wp_send_json($response);
+    }
 
-		$lead_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-		$name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
-		$email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+    $lead_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+    $name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+    $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
 
-		if (!$lead_id || !$name || !$email) {
-			wp_send_json_error(['message' => 'Missing or incorrect data']);
-			return;
-		}
+    if (!$lead_id || !$name || !$email) {
+        wp_send_json_error(['message' => 'Missing or incorrect data']);
+        return;
+    }
 
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'thrail_crm_leads';
-		if ($wpdb->update($table_name, ['name' => $name, 'email' => $email], ['id' => $lead_id], ['%s', '%s'], ['%d'])) {
-			wp_send_json_success(['message' => 'Lead successfully updated']);
-		} else {
-			wp_send_json_error(['message' => 'Failed to update lead']);
-		}
-	}
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'thrail_crm_leads';
+
+    // Check if the email exists in other rows
+    $email_exists = $wpdb->get_var($wpdb->prepare(
+        "SELECT id FROM $table_name WHERE email = %s AND id != %d",
+        $email, $lead_id
+    ));
+
+    if ($email_exists) {
+        wp_send_json_error(['message' => 'Email already exists with another lead']);
+        return;
+    }
+
+    if ($wpdb->update($table_name, ['name' => $name, 'email' => $email], ['id' => $lead_id], ['%s', '%s'], ['%d'])) {
+        wp_send_json_success(['message' => 'Lead successfully updated']);
+    } else {
+        wp_send_json_error(['message' => 'Failed to update lead']);
+    }
+}
+
 }
