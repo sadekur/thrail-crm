@@ -13,6 +13,7 @@ class Admin {
     function __construct() {
 
         new Admin\Menu();
+        // new Admin\Leads_List_Table();
     }
 
     /**

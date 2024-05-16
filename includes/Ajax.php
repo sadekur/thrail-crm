@@ -13,14 +13,14 @@ class Ajax {
 	}
 
 	public function handle_form_submission() {
-		check_ajax_referer('thrail-admin-nonce', 'nonce');
+		check_ajax_referer('nonce', 'nonce');
 
 		$response = [
 			 'status'	=> 0,
 			 'message'	=>__( 'Unauthorized!', 'thrail-crm' )
 		];
 
-		if( !wp_verify_nonce( $_POST['nonce'], 'thrail-admin-nonce' ) ) {
+		if( !wp_verify_nonce( $_POST['nonce'], 'nonce' ) ) {
 			wp_send_json( $response );
 		}
 
@@ -79,14 +79,14 @@ class Ajax {
 	}
 
 	public function update_lead() {
-    check_ajax_referer('thrail-front-nonce', 'nonce');
+    check_ajax_referer('nonce', 'nonce');
 
     $response = [
         'status'  => 0,
         'message' => __('Unauthorized!', 'thrail-crm')
     ];
 
-    if (!wp_verify_nonce($_POST['nonce'], 'thrail-front-nonce')) {
+    if (!wp_verify_nonce($_POST['nonce'], 'nonce')) {
         wp_send_json($response);
     }
 

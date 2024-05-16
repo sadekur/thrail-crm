@@ -36,7 +36,7 @@ class Assets {
 			'thrail-admin-script' => [
 				'src'     =>THRAIL_CRM_ASSETS . '/js/admin.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/admin.js'),
-				'deps'    => ['jquery', 'wp-util']
+				'deps'    => ['jquery', 'wp-util', 'jquery-ui-dialog']
 			],
 		];
 	}
@@ -49,7 +49,8 @@ class Assets {
 			],
 			'thrail-admin-style' => [
 				'src'     => $this->assets . '/css/admin.css',
-				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/admin.css')
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/admin.css'),
+				'deps'    => ['wp-jquery-ui-dialog']
 			],
 			'thrail-enquiry-style' => [
 				'src'     => $this->assets . '/css/enquiry.css',
@@ -69,7 +70,7 @@ class Assets {
 		wp_localize_script('thrail-enquiry-script', 'THRAIL', [
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			// 'resturl' => rest_url("thrail-crm/v1/submit"),
-			'nonce'   => wp_create_nonce('thrail-admin-nonce'),
+			'nonce'   => wp_create_nonce('nonce'),
 			'error'   => __('Something went wrong', 'thrail-crm')
 		]);
 
@@ -90,7 +91,7 @@ class Assets {
 		wp_register_script('thrail-admin-script', $scripts['thrail-admin-script']['src'], $scripts['thrail-admin-script']['deps'], $scripts['thrail-admin-script']['version'], true);
 		
 		wp_localize_script('thrail-admin-script', 'THRAIL', [
-			'nonce'   => wp_create_nonce('thrail-front-nonce'),
+			'nonce'   => wp_create_nonce('nonce'),
 			'confirm' => __('Are you sure?', 'thrail-crm'),
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'error'   => __('Something went wrong', 'thrail-crm')
