@@ -28,25 +28,4 @@ jQuery(document).ready(function($) {
 		    }
 		});
 	});
-
-	// $(document).on( 'submit', '#thrailOptinForm', function(e) {
-	// 	e.preventDefault();
-
-
-	// 	var $form = $(this);
-
-	// 	var $data = $form.serialize();
-
-	// 	$.ajax({
-	// 	    url: THRAIL.ajaxurl,
-	// 		data: $data,
-	// 		type: 'POST',
-	// 		dataType: 'JSON',
-	// 		success: function(resp){
-	// 			// console.log(resp);
-	// 		},
-	// 		error: function( $xhr, $sts, $err ) {
-	// 		}
-	// 	})
-	// })
 });

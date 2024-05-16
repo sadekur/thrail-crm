@@ -3,8 +3,13 @@
 namespace Thrail\Crm\Admin;
 use Thrail\Crm\Admin\Leads_List_Table;
 use Thrail\Crm\Admin\Email_Logs_List_Table;
+require_once __DIR__ . '/../../classes/Trait.php';
+
+use Thrail\Crm\Helper;
 
 class Menu {
+    use Helper;
+
 	private $leads_list_table;
 
 	function __construct() {
@@ -44,17 +49,7 @@ class Menu {
 
 	public function crm_page() {
 		echo '<div class="wrap"><h1 class="wp-heading-inline">Leads</h1>';
-		?>
-		<form method="get">
-			<input type="hidden" name="page" value="thrail-crm" />
-			<input type="text" name="s" value="<?php echo isset($_GET['s']) ? esc_attr($_GET['s']) : ''; ?>" />
-			<input type="submit" value="Filter" class="button" />
-		</form>
-		<form method="post">
-			<input type="hidden" name="action" value="export_csv">
-			<input type="submit" value="Export to CSV" class="button button-primary">
-		</form>
-		<?php
+		$this->render_filters();
 		$this->leads_list_table->prepare_items();
 		$this->leads_list_table->display();
 		echo '<div class="main">';
@@ -71,6 +66,7 @@ class Menu {
 		echo '</div>';
 	}
 
+
 	public function init_email_logs_table() {
 		$this->email_logs_list_table = new Email_Logs_List_Table();
 		add_screen_option('per_page', ['default' => 10, 'option' => 'email_logs_per_page']);
@@ -83,10 +79,11 @@ class Menu {
 	    echo '</div>';
 	}
 	public function handle_csv_export() {
-	    if (isset($_POST['action']) && $_POST['action'] === 'export_csv') {
-	        $leads_list_table = new Leads_List_Table();
-	        $leads_list_table->prepare_items();
-	        $leads_list_table->export_to_csv($leads_list_table->items);
-	    }
+	     if (isset($_POST['action']) && $_POST['action'] === 'export_csv' && check_admin_referer('export_csv', 'csv_nonce')) {
+            $this->leads_list_table = new Leads_List_Table(); // Ensure it's initialized
+            $this->leads_list_table->prepare_items();
+            $this->leads_list_table->export_to_csv();
+            exit; // Stop further execution to prevent the page from loading
+        }
 	}
 }

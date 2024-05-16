@@ -1,5 +1,5 @@
 {
-	"name": "thrail/crm",
+    "name": "thrail/crm",
     "description": "A plugin for Crm",
     "type": "wordpress-plugin",
     "license": "GPLv2",
@@ -10,10 +10,10 @@
         }
     ],
     "require": {},
-	"autoload": {
+    "autoload": {
         "psr-4": {
             "Thrail\\Crm\\": "includes/"
         },
-        "files": [ "includes/functions.php" ]
+        "files": ["includes/functions.php"]
     }
 }
