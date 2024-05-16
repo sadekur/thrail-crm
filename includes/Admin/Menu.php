@@ -80,10 +80,10 @@ class Menu {
 	}
 	public function handle_csv_export() {
 	     if (isset($_POST['action']) && $_POST['action'] === 'export_csv' && check_admin_referer('export_csv', 'csv_nonce')) {
-            $this->leads_list_table = new Leads_List_Table(); // Ensure it's initialized
+            $this->leads_list_table = new Leads_List_Table();
             $this->leads_list_table->prepare_items();
             $this->leads_list_table->export_to_csv();
-            exit; // Stop further execution to prevent the page from loading
+            exit;
         }
 	}
 }

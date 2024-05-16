@@ -18,31 +18,5 @@ Trait Helper {
         </form>
         <?php
     }
-
-    public function fetch_data() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'thrail_crm_leads';
-        $sql = "SELECT * FROM {$table_name} ORDER BY time DESC";
-        $results = $wpdb->get_results($sql, ARRAY_A);
-
-        if ($results === false) {
-            echo "<p>Error retrieving data from database: " . $wpdb->last_error . "</p>";
-            return [];
-        }
-
-        return $results;
-    }
-
-    public function column_default($item, $column_name) {
-        return isset($item[$column_name]) ? esc_html($item[$column_name]) : 'No data';
-    }
-
-    public function column_time($item) {
-        return sprintf('<strong>%s</strong>', esc_html($item['time']));
-    }
-
-    public function column_cb($item) {
-        return sprintf('<input type="checkbox" name="id[]" value="%d" />', esc_attr($item['id']));
-    }
 	
 }
