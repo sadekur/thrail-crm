@@ -2,6 +2,7 @@
 
 namespace Thrail\Crm\Admin;
 use Thrail\Crm\Admin\Leads_List_Table;
+use Thrail\Crm\Admin\Email_Logs_List_Table;
 
 class Menu {
 	private $leads_list_table;
@@ -21,6 +22,15 @@ class Menu {
 		);
 
 		add_action("load-$hook", [$this, 'init_list_table']);
+
+		$email_hook = add_submenu_page(
+			'thrail-crm', 'Email Logs', 
+			'Email Logs', 'manage_options', 
+			'thrail-crm-email-logs', 
+			[$this, 'email_logs_page']
+		);
+
+    	add_action("load-$email_hook", [$this, 'init_email_logs_table']);
 	}
 
 	public function init_list_table() {
@@ -47,5 +57,17 @@ class Menu {
 		echo '</div>';
 		echo '</div>';
 		echo '</div>';
+	}
+
+	public function init_email_logs_table() {
+		$this->email_logs_list_table = new Email_Logs_List_Table();
+		add_screen_option('per_page', ['default' => 10, 'option' => 'email_logs_per_page']);
+	}
+
+	public function email_logs_page() {
+	    echo '<div class="wrap"><h1>Email Logs</h1>';
+	    $this->email_logs_list_table->prepare_items();
+	    $this->email_logs_list_table->display();
+	    echo '</div>';
 	}
 }

@@ -102,7 +102,6 @@ class Ajax {
     global $wpdb;
     $table_name = $wpdb->prefix . 'thrail_crm_leads';
 
-    // Check if the email exists in other rows
     $email_exists = $wpdb->get_var($wpdb->prepare(
         "SELECT id FROM $table_name WHERE email = %s AND id != %d",
         $email, $lead_id
