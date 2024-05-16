@@ -1,4 +1,5 @@
 jQuery(document).ready(function($) {
+	/*Delete Leads*/
 	$('.delete-lead').on('click', function(e) {
 		e.preventDefault();
 		var id = $(this).data('id');
@@ -22,82 +23,62 @@ jQuery(document).ready(function($) {
 
 	});
 
-	// $('.edit-lead').on('click', function(e) {
-	//     e.preventDefault();
-	//     var id = $(this).data('id');
+	/*Edit Leads*/
+	var edit_lead_modal = $('#editLeadModal'),
+	lead_id = $('#leadId'),
+	lead_name = $('#leadName'),
+	lead_email = $('#leadEmail');
 
-	//     $.ajax({
-	//         url: THRAIL.ajaxurl,
-	//         method: "POST",
-	//         data: {
-	//             action: 'update_lead',
-	//             id: id
-	//         },
-	//         dataType: 'JSON',
-	//         success: function(response) {
-	//             alert(response.data.message);
-	//              location.reload();
-	//         },
-	//         error: function(response) {
-	//             console.log(response);
-	//         }
-	//     });
+	edit_lead_modal.dialog({
+		autoOpen: false,
+		height: 300,
+		width: 350,
+		modal: true,
+		buttons: {
+			"Save changes": function() {
+				updateLead();
+			},
+			Cancel: function() {
+				$(this).dialog("close");
+			}
+		}
+	});
 
+	$('.edit-lead').click(function(e) {
+		e.preventDefault();
+		var $currentRow = $(this).closest('tr');
 
-	// });
+		lead_id.val($(this).data('id'));
+		lead_name.val($currentRow.find('.name-column').text());
+		lead_email.val($currentRow.find('.email-column').text());
+		edit_lead_modal.dialog('open');
+	});
 
-        $('.edit-lead').click(function(e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var currentRow = $(this).closest('tr');
-            var name = currentRow.find('.name-column').text();
-            var email = currentRow.find('.email-column').text();
+	function updateLead() {
+		var postData = {
+			action: 'update_lead',
+			id: lead_id.val(),
+			name: lead_name.val(),
+			email: lead_email.val(),
+			nonce: THRAIL.nonce
+		};
 
-            $('#leadId').val(id);
-            $('#leadName').val(name);
-            $('#leadEmail').val(email);
+		$.ajax({
+			url: THRAIL.ajaxurl,
+			method: "POST",
+			data: postData,
+			success: function(response) {
+				if (response.success) {
+					alert('Lead updated successfully');
+					location.reload();
+				} else {
+					alert('Error: ' + response.data.message);
+				}
+			},
+			error: function(xhr, status, error) {
+				alert('AJAX error: ' + error);
+			}
+		});
+	}
 
-            $('#editLeadModal').dialog({
-                autoOpen: false,
-                height: 300,
-                width: 350,
-                modal: true,
-                buttons: {
-                    "Save changes": function() {
-                        updateLead();
-                    },
-                    Cancel: function() {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-            $('#editLeadModal').dialog('open');
-        });
-
-        function updateLead() {
-            var id = $('#leadId').val();
-            var name = $('#leadName').val();
-            var email = $('#leadEmail').val();
-
-            $.ajax({
-                url: THRAIL.ajaxurl,
-                method: "POST",
-                data: {
-                    action: 'update_lead',
-                    id: id,
-                    name: name,
-                    email: email,
-                    nonce: THRAIL.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert('Lead updated successfully');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + response.data.message);
-                    }
-                }
-            });
-        }
 });
