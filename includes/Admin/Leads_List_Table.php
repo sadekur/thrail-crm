@@ -39,20 +39,46 @@ class Leads_List_Table extends \WP_List_Table {
 	}
 
 	public function prepare_items() {
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'thrail_crm_leads';
+		$columns = $this->get_columns();
+		$hidden = [];
+		$sortable = $this->get_sortable_columns();
+		$this->_column_headers = [$columns, $hidden, $sortable];
 
-		$per_page = 10;
-		$current_page = $this->get_pagenum();
-		$total_items = $wpdb->get_var("SELECT COUNT(id) FROM $table_name");
+		$search_term = isset($_REQUEST['s']) ? trim($_REQUEST['s']) : '';
+		$data = $this->fetch_data($search_term);
+		$perPage = 10;
+		$currentPage = $this->get_pagenum();
+		$totalItems = count($data);
 
 		$this->set_pagination_args([
-			'total_items' => $total_items,
-			'per_page'    => $per_page
+			'total_items' => $totalItems,
+			'per_page'    => $perPage
 		]);
 
-		$this->items = $wpdb->get_results($wpdb->prepare(
-			"SELECT * FROM $table_name LIMIT %d OFFSET %d;", $per_page, ($current_page - 1) * $per_page
-		), ARRAY_A);
+		$this->items = array_slice($data, (($currentPage - 1) * $perPage), $perPage);
+
+		if (isset($_POST['action']) && $_POST['action'] === 'export_csv') {
+			$this->export_to_csv($data);
+		}
+	}
+	protected function fetch_data($search_term = '') {
+		global $wpdb;
+		$sql = "SELECT * FROM {$wpdb->prefix}thrail_crm_leads";
+		if (!empty($search_term)) {
+			$sql .= $wpdb->prepare(" WHERE name LIKE %s OR email LIKE %s", '%' . $wpdb->esc_like($search_term) . '%', '%' . $wpdb->esc_like($search_term) . '%');
+		}
+		return $wpdb->get_results($sql, ARRAY_A);
+	}
+	public function export_to_csv($data) {
+		ob_end_clean();
+		header('Content-Type: text/csv; charset=utf-8');
+		header('Content-Disposition: attachment; filename="leads.csv"');
+		$output = fopen('php://output', 'w');
+		fputcsv($output, array('ID', 'Name', 'Email', 'Date'));
+		foreach ($data as $row) {
+			fputcsv($output, $row);
+		}
+		fclose($output);
+		exit;
 	}
 }

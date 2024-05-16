@@ -9,6 +9,7 @@ class Menu {
 
 	function __construct() {
 		add_action('admin_menu', [$this, 'admin_menu']);
+		add_action('admin_init', [$this, 'handle_csv_export']);
 	}
 
 	public function admin_menu() {
@@ -43,6 +44,17 @@ class Menu {
 
 	public function crm_page() {
 		echo '<div class="wrap"><h1 class="wp-heading-inline">Leads</h1>';
+		?>
+		<form method="get">
+			<input type="hidden" name="page" value="thrail-crm" />
+			<input type="text" name="s" value="<?php echo isset($_GET['s']) ? esc_attr($_GET['s']) : ''; ?>" />
+			<input type="submit" value="Filter" class="button" />
+		</form>
+		<form method="post">
+			<input type="hidden" name="action" value="export_csv">
+			<input type="submit" value="Export to CSV" class="button button-primary">
+		</form>
+		<?php
 		$this->leads_list_table->prepare_items();
 		$this->leads_list_table->display();
 		echo '<div class="main">';
@@ -69,5 +81,12 @@ class Menu {
 	    $this->email_logs_list_table->prepare_items();
 	    $this->email_logs_list_table->display();
 	    echo '</div>';
+	}
+	public function handle_csv_export() {
+	    if (isset($_POST['action']) && $_POST['action'] === 'export_csv') {
+	        $leads_list_table = new Leads_List_Table();
+	        $leads_list_table->prepare_items();
+	        $leads_list_table->export_to_csv($leads_list_table->items);
+	    }
 	}
 }
