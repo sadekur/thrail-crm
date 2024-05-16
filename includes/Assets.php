@@ -52,9 +52,9 @@ class Assets {
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/admin.css'),
 				'deps'    => ['wp-jquery-ui-dialog']
 			],
-			'thrail-enquiry-style' => [
-				'src'     => $this->assets . '/css/enquiry.css',
-				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/enquiry.css')
+			'jquery-ui' => [
+				'src'     => 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css',
+				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/jquery-ui.css')
 			],
 		];
 	}
@@ -76,12 +76,9 @@ class Assets {
 
 		wp_register_style('thrail-style', $styles['thrail-style']['src'], [], $styles['thrail-style']['version']);
 
-		wp_register_style('thrail-enquiry-style', $styles['thrail-enquiry-style']['src'], [], $styles['thrail-enquiry-style']['version']);
-
 		wp_enqueue_script('thrail-script');
 		wp_enqueue_script('thrail-enquiry-script');
 		wp_enqueue_style('thrail-style');
-		wp_enqueue_style('thrail-enquiry-style');
 	}
 
 	public function register_admin_assets() {
@@ -98,8 +95,10 @@ class Assets {
 		]);
 
 		wp_register_style('thrail-admin-style', $styles['thrail-admin-style']['src'], [], $styles['thrail-admin-style']['version']);
+		wp_register_style('jquery-ui', $styles['jquery-ui']['src'], [], $styles['jquery-ui']['version']);
 
 		wp_enqueue_script('thrail-admin-script');
 		wp_enqueue_style('thrail-admin-style');
+		wp_enqueue_style('jquery-ui');
 	}
 }
