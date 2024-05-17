@@ -24,11 +24,7 @@ jQuery(document).ready(function($) {
 	});
 
 	/*Edit Leads*/
-	var edit_lead_modal = $('#editLeadModal'),
-	lead_id = $('#leadId'),
-	lead_name = $('#leadName'),
-	lead_email = $('#leadEmail');
-
+	var edit_lead_modal = $('#edit_lead');
 	edit_lead_modal.dialog({
 		autoOpen: false,
 		height: 300,
@@ -44,22 +40,22 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$('.edit-lead').click(function(e) {
+	$(document).on('click', '.edit-lead', function(e) {
 		e.preventDefault();
 		var $currentRow = $(this).closest('tr');
 
-		lead_id.val($(this).data('id'));
-		lead_name.val($currentRow.find('.name-column').text());
-		lead_email.val($currentRow.find('.email-column').text());
+		$('#lead_id').val($(this).data('id'));
+		$('#lead_name').val($currentRow.find('.name-column').text());
+		$('#lead_email').val($currentRow.find('.email-column').text());
 		edit_lead_modal.dialog('open');
 	});
 
 	function updateLead() {
 		var postData = {
 			action: 'update_lead',
-			id: lead_id.val(),
-			name: lead_name.val(),
-			email: lead_email.val(),
+			id: $('#lead_id').val(),
+			name: $('#lead_name').val(),
+			email: $('#lead_email').val(),
 			nonce: THRAIL.nonce
 		};
 

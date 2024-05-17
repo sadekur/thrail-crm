@@ -8,7 +8,6 @@ class Email {
 		add_action( 'thrail_crm_send_follow_up_email', [ $this, 'send_follow_up_email' ] );
 	}
 
-
 	public function handle_new_subscription( $name, $email ) {
 		$this->send_congratulatory_email($name, $email);
 		$args = ['name' => $name, 'email' => $email];

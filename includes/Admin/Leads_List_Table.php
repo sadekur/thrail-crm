@@ -23,12 +23,12 @@ class Leads_List_Table extends \WP_List_Table {
 		];
 	}
 	protected function get_sortable_columns() {
-        return [
-            'name'  => [ 'name', true ],
-            'email' => [ 'email', true ],
-            'actions' => [ 'actions', true ],
-        ];
-    }
+		return [
+			'name'  => [ 'name', true ],
+			'email' => [ 'email', true ],
+			'actions' => [ 'actions', true ],
+		];
+	}
 
 	protected function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
