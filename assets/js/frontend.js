@@ -40,6 +40,8 @@ jQuery(document).ready(function($) {
 		var email = $("#email").val();
 		var loader = $('#formLoader');
 
+		loader.show();
+
 		$.ajax({
 			url: THRAIL.resturl,
 			method: "POST",
@@ -49,11 +51,10 @@ jQuery(document).ready(function($) {
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('nonce', THRAIL.nonce);
-				loader.css('visibility', 'visible');
 			},
 			success: function(response) {
 				alert(response.message);
-				loader.css('visibility', 'hidden');
+				loader.hide();
 			},
 			error: function(response) {
 				console.log(response);
@@ -62,7 +63,7 @@ jQuery(document).ready(function($) {
 				} else {
 					alert('Failed to submit form.');
 				}
-				loader.css('visibility', 'hidden');
+				loader.hide();
 			}
 		});
 	});

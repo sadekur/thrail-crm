@@ -30,7 +30,7 @@ if ( ! function_exists( 'handle_new_subscription' ) ):
 	function handle_new_subscription($name, $email) {
 	    send_congratulatory_email($name, $email);
 	    $args = ['name' => $name, 'email' => $email];
-	    wp_schedule_single_event(time() + MNUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args);
+	    wp_schedule_single_event(time() + HOUR_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args);
 	}
 endif;
 
