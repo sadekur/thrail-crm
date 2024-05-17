@@ -22,6 +22,13 @@ class Leads_List_Table extends \WP_List_Table {
 			'actions' => __( 'Actions', 'thrail-crm' ),
 		];
 	}
+	protected function get_sortable_columns() {
+        return [
+            'name'  => [ 'name', true ],
+            'email' => [ 'email', true ],
+            'actions' => [ 'actions', true ],
+        ];
+    }
 
 	protected function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
@@ -46,16 +53,16 @@ class Leads_List_Table extends \WP_List_Table {
 
 		$search_term 			= isset( $_REQUEST[ 's' ] ) ? trim( $_REQUEST[ 's' ] ) : '';
 		$data 					= $this->fetch_data( $search_term );
-		$perPage 				= 10;
-		$currentPage 			= $this->get_pagenum();
-		$totalItems 			= count( $data );
+		$per_page 				= 10;
+		$current_page 			= $this->get_pagenum();
+		$total_items 			= count( $data );
 
 		$this->set_pagination_args([
-			'total_items' => $totalItems,
-			'per_page'    => $perPage
+			'total_items' => $total_items,
+			'per_page'    => $per_page
 		]);
 
-		$this->items = array_slice( $data, ( ( $currentPage - 1 ) * $perPage ), $perPage );
+		$this->items = array_slice( $data, ( ( $current_page - 1 ) * $per_page ), $per_page );
 
 		if ( isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === 'export_csv' ) {
 			$this->export_to_csv( $data );

@@ -4,7 +4,7 @@ namespace Thrail\Crm;
 class RestAPI {
 	use Helper;
 	public function __construct() {
-require_once __DIR__ . '/../classes/Trait.php';
+	require_once __DIR__ . '/../classes/Trait.php';
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
