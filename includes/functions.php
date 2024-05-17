@@ -1,6 +1,6 @@
 <?php
 // Exit if accessed directly
-if (!defined('ABSPATH')) {
+if ( !defined('ABSPATH' ) ) {
 	exit;
 }
 
@@ -28,29 +28,29 @@ endif;
 
 if ( ! function_exists( 'handle_new_subscription' ) ):
 	function handle_new_subscription($name, $email) {
-	    send_congratulatory_email($name, $email);
-	    $args = ['name' => $name, 'email' => $email];
-	    wp_schedule_single_event(time() + HOUR_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args);
+	    send_congratulatory_email( $name, $email );
+	    $args = [ 'name' => $name, 'email' => $email ];
+	    wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
 	}
 endif;
 
 if ( ! function_exists( 'send_congratulatory_email' ) ):
-	function send_congratulatory_email($name, $email) {
+	function send_congratulatory_email( $name, $email ) {
 	    $subject = "Congratulations on subscribing!";
 	    $message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
-	    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+	    $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
 
-	    wp_mail($email, $subject, $message, $headers);
+	    wp_mail( $email, $subject, $message, $headers );
 	}
 endif;
 
-add_action('thrail_crm_send_follow_up_email', 'send_follow_up_email');
+add_action( 'thrail_crm_send_follow_up_email', 'send_follow_up_email' );
 
 function send_follow_up_email($args) {
     $subject = "Reminder: Explore More Features!";
     $message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
-    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+    $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
 
-    wp_mail($args['email'], $subject, $message, $headers);
+    wp_mail( $args[ 'email' ], $subject, $message, $headers);
 }
 
