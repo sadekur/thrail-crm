@@ -2,7 +2,9 @@
 namespace Thrail\Crm;
 
 class RestAPI {
+	use Helper;
 	public function __construct() {
+require_once __DIR__ . '/../classes/Trait.php';
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
@@ -46,7 +48,7 @@ class RestAPI {
 		);
 
 		if ( $inserted ) {
-			send_congratulatory_email( $name, $email );
+			$this->send_congratulatory_email( $name, $email );
 			return new \WP_REST_Response( [ 'message' => 'Thank you for subscribing!' ], 200 );
 		} else {
 			return new \WP_Error( 'db_error', 'Failed to register. Please try again.', [ 'status' => 500 ] );
