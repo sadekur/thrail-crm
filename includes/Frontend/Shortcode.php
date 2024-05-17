@@ -14,9 +14,9 @@ class Shortcode {
 		// wp_enqueue_style( 'thrail-style' );
 		$form_html = '<form id="thrailOptinForm" action="" method="post">
 		<label for="name">Name:</label><br>
-		<input type="text" id="name" name="name" placeholder="Enter your name"><br>
+		<input type="text" id="name" name="name" required placeholder="Enter your name"><br>
 		<label for="email">Email:</label><br>
-		<input type="email" id="email" name="email" placeholder="Enter your email"><br>
+		<input type="email" id="email" name="email" required placeholder="Enter your email"><br>
 		<input type="submit" class= value="Subscribe">
 		</form>';
 		return $form_html;
@@ -25,7 +25,7 @@ class Shortcode {
 	public function optin_footer() {
 		if (!is_admin()) {
 			echo '<div class="loader-container" id="formLoader" style="display: none;">' .
-				 '<img src="' . THRAIL_CRM_ASSETS . 'img/loader.gif" alt="Loading...">' .
+				 '<img src="' . THRAIL_CRM_ASSETS . '/img/loader.gif" alt="Loading...">' .
 				 '</div>';
 		}
 	}

@@ -28,11 +28,11 @@ class Assets {
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/frontend.js'),
 				'deps'    => ['jquery']
 			],
-			'thrail-enquiry-script' => [
-				'src'     => THRAIL_CRM_ASSETS . '/js/enquiry.js',
-				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/enquiry.js'),
-				'deps'    => ['jquery']
-			],
+			// 'thrail-enquiry-script' => [
+			// 	'src'     => THRAIL_CRM_ASSETS . '/js/enquiry.js',
+			// 	'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/enquiry.js'),
+			// 	'deps'    => ['jquery']
+			// ],
 			'thrail-admin-script' => [
 				'src'     =>THRAIL_CRM_ASSETS . '/js/admin.js',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/js/admin.js'),
@@ -44,7 +44,7 @@ class Assets {
 	public function get_styles() {
 		return [
 			'thrail-style' => [
-				'src'     => $this->assets . '/css/frontend.css',
+				'src'     => THRAIL_CRM_ASSETS . '/css/frontend.css',
 				'version' => filemtime(THRAIL_CRM_PATH . '/assets/css/frontend.css')
 			],
 			'thrail-admin-style' => [
@@ -65,9 +65,9 @@ class Assets {
 
 		wp_register_script('thrail-script', $scripts['thrail-script']['src'], $scripts['thrail-script']['deps'], $scripts['thrail-script']['version'], true);
 
-		wp_register_script('thrail-enquiry-script', $scripts['thrail-enquiry-script']['src'], $scripts['thrail-enquiry-script']['deps'], $scripts['thrail-enquiry-script']['version'], true);
+		// wp_register_script('thrail-enquiry-script', $scripts['thrail-enquiry-script']['src'], $scripts['thrail-enquiry-script']['deps'], $scripts['thrail-enquiry-script']['version'], true);
 
-		wp_localize_script('thrail-enquiry-script', 'THRAIL', [
+		wp_localize_script('thrail-script', 'THRAIL', [
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'resturl' => rest_url("thrail-crm/v1/submit"),
 			'nonce'   => wp_create_nonce('nonce'),
@@ -77,7 +77,7 @@ class Assets {
 		wp_register_style('thrail-style', $styles['thrail-style']['src'], [], $styles['thrail-style']['version']);
 
 		wp_enqueue_script('thrail-script');
-		wp_enqueue_script('thrail-enquiry-script');
+		// wp_enqueue_script('thrail-enquiry-script');
 		wp_enqueue_style('thrail-style');
 	}
 
