@@ -6,6 +6,7 @@ class Shortcode {
 
 	function __construct() {
 		add_shortcode('thrail-crm', [$this, 'optin_form']);
+		add_action('wp_footer', [$this, 'optin_footer']);
 	}
 
 	public function optin_form($atts) {
@@ -20,5 +21,14 @@ class Shortcode {
 		</form>';
 		return $form_html;
 	}
+
+	public function optin_footer() {
+		if (!is_admin()) {
+			echo '<div class="loader-container" id="formLoader">
+			<div class="loader">sa</div>
+			</div>';
+		}
+	}
+
 }
 ?>

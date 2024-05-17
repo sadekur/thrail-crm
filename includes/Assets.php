@@ -69,7 +69,7 @@ class Assets {
 
 		wp_localize_script('thrail-enquiry-script', 'THRAIL', [
 			'ajaxurl' => admin_url('admin-ajax.php'),
-			// 'resturl' => rest_url("thrail-crm/v1/submit"),
+			'resturl' => rest_url("thrail-crm/v1/submit"),
 			'nonce'   => wp_create_nonce('nonce'),
 			'error'   => __('Something went wrong', 'thrail-crm')
 		]);

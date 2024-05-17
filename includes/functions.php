@@ -26,46 +26,31 @@ if( ! function_exists( 'thrail_crm_activate' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'send_congratulatory_email' ) ):
-	function send_congratulatory_email( $name, $email ) {
-		$subject = "Congratulations on subscribing!";
-		$message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
-		$headers = ['Content-Type: text/plain; charset=UTF-8'];
-
-		wp_mail( $email, $subject, $message, $headers );
+if ( ! function_exists( 'handle_new_subscription' ) ):
+	function handle_new_subscription($name, $email) {
+	    send_congratulatory_email($name, $email);
+	    $args = ['name' => $name, 'email' => $email];
+	    wp_schedule_single_event(time() + MNUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args);
 	}
 endif;
 
-if ( ! function_exists( 'fetch_data' ) ):
-	function fetch_data() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'thrail_crm_leads';
-        $sql = "SELECT * FROM {$table_name} ORDER BY time DESC";
-        $results = $wpdb->get_results($sql, ARRAY_A);
+if ( ! function_exists( 'send_congratulatory_email' ) ):
+	function send_congratulatory_email($name, $email) {
+	    $subject = "Congratulations on subscribing!";
+	    $message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
+	    $headers = ['Content-Type: text/plain; charset=UTF-8'];
 
-        if ($results === false) {
-            echo "<p>Error retrieving data from database: " . $wpdb->last_error . "</p>";
-            return [];
-        }
-
-        return $results;
-    }
+	    wp_mail($email, $subject, $message, $headers);
+	}
 endif;
 
-if ( ! function_exists( 'column_default' ) ):
-    function column_default($item, $column_name) {
-        return isset($item[$column_name]) ? esc_html($item[$column_name]) : 'No data';
-    }
-endif;
+add_action('thrail_crm_send_follow_up_email', 'send_follow_up_email');
 
-if ( ! function_exists( 'column_time' ) ):
-    function column_time($item) {
-        return sprintf('<strong>%s</strong>', esc_html($item['time']));
-    }
-endif;
+function send_follow_up_email($args) {
+    $subject = "Reminder: Explore More Features!";
+    $message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
+    $headers = ['Content-Type: text/plain; charset=UTF-8'];
 
-if ( ! function_exists( 'column_cb' ) ):
-    function column_cb($item) {
-        return sprintf('<input type="checkbox" name="id[]" value="%d" />', esc_attr($item['id']));
-    }
-endif;
+    wp_mail($args['email'], $subject, $message, $headers);
+}
+

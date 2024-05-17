@@ -75,6 +75,8 @@ final class Thrail_Crm{
 	public function init_plugin() {
 
 		new Thrail\Crm\Assets();
+		new Thrail\Crm\Email();
+		new Thrail\Crm\RestAPI();
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			new Thrail\Crm\Ajax();
