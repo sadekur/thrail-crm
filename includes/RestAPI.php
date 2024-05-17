@@ -26,25 +26,25 @@ class RestAPI {
 		] );
 	}
 
-	public function handle_form_submission($request) {
-		$name = $request->get_param( 'name' );
-		$email = $request->get_param( 'email' );
+	public function handle_form_submission( $request ) {
+		$name 	= $request->get_param( 'name' );
+		$email 	= $request->get_param( 'email' );
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'thrail_crm_leads';
 
-		$email_exists = $wpdb->get_var($wpdb->prepare(
+		$email_exists = $wpdb->get_var( $wpdb->prepare(
 			"SELECT COUNT(*) FROM $table_name WHERE email = %s",
 			$email
-		));
-		if ($email_exists) {
-			return new \WP_Error('email_exists', 'This email is already registered.', ['status' => 400]);
+		) );
+		if ( $email_exists ) {
+			return new \WP_Error( 'email_exists', 'This email is already registered.', [ 'status' => 400 ] );
 		}
 
 		$inserted = $wpdb->insert(
 			$table_name,
-			['name' => $name, 'email' => $email],
-			['%s', '%s']
+			[ 'name' => $name, 'email' => $email ],
+			[ '%s', '%s' ]
 		);
 
 		if ( $inserted ) {

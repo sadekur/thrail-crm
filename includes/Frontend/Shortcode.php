@@ -10,8 +10,6 @@ class Shortcode {
 	}
 
 	public function optin_form() {
-		// wp_enqueue_script( 'thrail-script' );
-		// wp_enqueue_style( 'thrail-style' );
 		$form_html = '<form id="thrailOptinForm" action="" method="post">
 		<label for="name">Name:</label><br>
 		<input type="text" id="name" name="name" required placeholder="Enter your name"><br>
