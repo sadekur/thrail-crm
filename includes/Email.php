@@ -10,12 +10,12 @@ class Email {
 
 	public function handle_new_subscription( $name, $email ) {
 		$this->send_congratulatory_email( $name, $email );
-		$args = ['name' => $name, 'email' => $email];
+		$args = [ 'name' => $name, 'email' => $email ];
 		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
 	}
 
 
-	public function send_follow_up_email($args) {
+	public function send_follow_up_email( $args ) {
 		$subject = "Reminder: Explore More Features!";
 		$message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
 		$headers = ['Content-Type: text/plain; charset=UTF-8'];

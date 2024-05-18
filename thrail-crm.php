@@ -77,7 +77,6 @@ final class Thrail_Crm{
 		new Thrail\Crm\Assets();
 		new Thrail\Crm\Email();
 		new Thrail\Crm\RestAPI();
-		// new Thrail\Crm\Abstruct();
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			new Thrail\Crm\Ajax();
