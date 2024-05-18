@@ -1,6 +1,6 @@
 <?php
 
-namespace Thrail\Crm\Admin;
+namespace Thrail\Crm;
 
 class Abstruct {
 	

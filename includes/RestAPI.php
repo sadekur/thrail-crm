@@ -6,7 +6,6 @@ class RestAPI {
 	public function __construct() {
 	require_once __DIR__ . '/../classes/Trait.php';
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
-		add_action( 'thrail_crm_send_follow_up_email', [ $this, 'send_follow_up_email' ] );
 	}
 
 	public function register_routes() {
@@ -25,21 +24,6 @@ class RestAPI {
 				]
 			]
 		] );
-	}
-
-		public function handle_new_subscription( $name, $email ) {
-		// $this->send_congratulatory_email( $name, $email );
-		$args = [ 'name' => $name, 'email' => $email ];
-		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
-	}
-
-
-	public function send_follow_up_email( $args ) {
-		$subject = "Reminder: Explore More Features!";
-		$message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
-		$headers = ['Content-Type: text/plain; charset=UTF-8'];
-
-		wp_mail( $args[ 'email' ], $subject, $message, $headers );
 	}
 
 	public function handle_form_submission( $request ) {
@@ -65,8 +49,6 @@ class RestAPI {
 
 		if ( $inserted ) {
 			$this->send_congratulatory_email( $name, $email );
-			// $this->handle_new_subscription( $name, $email );
-			$this->send_follow_up_email( $args );
 			return new \WP_REST_Response( [ 'message' => 'Thank you for subscribing!' ], 200 );
 		} else {
 			return new \WP_Error( 'db_error', 'Failed to register. Please try again.', [ 'status' => 500 ] );
