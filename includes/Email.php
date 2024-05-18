@@ -9,7 +9,7 @@ class Email {
 	}
 
 	public function handle_new_subscription( $name, $email ) {
-		$this->send_congratulatory_email($name, $email);
+		$this->send_congratulatory_email( $name, $email );
 		$args = ['name' => $name, 'email' => $email];
 		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
 	}
@@ -20,7 +20,7 @@ class Email {
 		$message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
 		$headers = ['Content-Type: text/plain; charset=UTF-8'];
 
-		wp_mail( $args['email'], $subject, $message, $headers );
+		wp_mail( $args[ 'email' ], $subject, $message, $headers );
 	}
 
 }
