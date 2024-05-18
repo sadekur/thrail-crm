@@ -43,7 +43,8 @@ jQuery(document).ready(function($) {
 		loader.show();
 
 		$.ajax({
-			url: THRAIL.resturl,
+			// url: THRAIL.resturl,
+			url: '/wp-json/thrail-crm/v1/submit',
 			method: "POST",
 			data: {
 				name: name,

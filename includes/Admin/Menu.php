@@ -42,8 +42,8 @@ class Menu {
 	public function init_list_table() {
 		$this->leads_list_table = new Leads_List_Table();
 		add_screen_option( 'per_page', [
-			'default' => 10,
-			'option' => 'leads_per_page'
+			'default' 	=> 10,
+			'option' 	=> 'leads_per_page'
 		] );
 	}
 
