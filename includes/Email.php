@@ -9,9 +9,9 @@ class Email {
 	}
 
 	public function handle_new_subscription( $name, $email ) {
-		$this->send_congratulatory_email( $name, $email );
+		// $this->send_congratulatory_email( $name, $email );
 		$args = [ 'name' => $name, 'email' => $email ];
-		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
+		wp_schedule_single_event( time() + HOUR_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
 	}
 
 

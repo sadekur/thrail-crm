@@ -1,5 +1,6 @@
 <?php
 namespace Thrail\Crm;
+// use Thrail\Crm\Email;
 
 class RestAPI {
 	use Helper;
