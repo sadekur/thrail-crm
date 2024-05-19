@@ -2,6 +2,6 @@
 
 namespace Thrail\Crm;
 
-class Abstruct {
+abstract class Abstruct {
 	
 }
