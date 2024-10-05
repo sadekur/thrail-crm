@@ -53,7 +53,7 @@ class Assets {
 				'deps'    => [ 'wp-jquery-ui-dialog' ]
 			],
 			'jquery-ui' => [
-				'src'     => 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css',
+				'src'     => THRAIL_CRM_ASSETS . '/css/jquery-ui.css',
 				'version' => filemtime( THRAIL_CRM_PATH . '/assets/css/jquery-ui.css' )
 			],
 		];
