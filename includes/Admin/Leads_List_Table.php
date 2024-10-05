@@ -50,8 +50,7 @@ class Leads_List_Table extends \WP_List_Table {
 		$hidden 				= [];
 		$sortable 				= $this->get_sortable_columns();
 		$this->_column_headers 	= [ $columns, $hidden, $sortable ];
-
-		$search_term 			= isset( $_REQUEST[ 's' ] ) ? trim( $_REQUEST[ 's' ] ) : '';
+		$search_term 			= sanitize_text_field( $_REQUEST['s'] ?? '' );
 		$data 					= $this->fetch_data( $search_term );
 		$per_page 				= 10;
 		$current_page 			= $this->get_pagenum();
