@@ -8,7 +8,7 @@ Trait Helper {
 		?>
 		<form method="get">
 			<input type="hidden" name="page" value="thrail-crm" />
-			<input type="text" name="s" value="<?php echo isset( $_GET[ 's' ] ) ? esc_attr( $_GET[ 's' ] ) : ''; ?>" />
+			<input type="text" name="s" value="<?php echo esc_attr( sanitize_text_field( $_GET[ 's' ] ?? '' ) ); ?>" />
 			<input type="submit" value="Filter" class="button" />
 		</form>
 		<form method="post">
