@@ -24,7 +24,7 @@ class Ajax {
 		];
 
 		if( !wp_verify_nonce( $_POST['nonce'], 'nonce' ) ) {
-			wp_send_json( $response );
+			wp_die( 'Nonce verification failed!' );
 		}
 
 		if ( isset( $_POST[ 'name' ] ) && isset( $_POST[ 'email' ] ) ) {
@@ -47,7 +47,7 @@ class Ajax {
 				[ 'name' => $name, 'email' => $email ],
 				[ '%s', '%s' ]
 			);
-			update_option('inserted', $inserted);
+			update_option( 'thrail_crm_inserted', $inserted );
 
 			if ( $inserted ) {
 				$this->send_congratulatory_email( $name, $email );
@@ -89,7 +89,7 @@ class Ajax {
 		];
 
 		if ( !wp_verify_nonce( $_POST[ 'nonce' ], 'nonce' ) ) {
-			wp_send_json( $response );
+			wp_die( 'Nonce verification failed!' );
 		}
 
 		$lead_id 	= isset( $_POST[ 'id' ] ) ? intval( $_POST[ 'id' ] ) : 0;
