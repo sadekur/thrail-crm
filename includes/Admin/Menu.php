@@ -11,6 +11,7 @@ class Menu {
     use Helper;
 
 	private $leads_list_table;
+	private $email_logs_list_table;
 
 	function __construct() {
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
