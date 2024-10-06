@@ -60,6 +60,13 @@ class Ajax {
 	}
 
 	public function delete_lead() {
+
+        check_ajax_referer( 'nonce', 'nonce' );
+
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'nonce' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid nonce', 'thrail-crm' ) ] );
+            return;
+        }
 		if ( !current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( [ 'message' => 'Unauthorized access' ] );
 			return;
@@ -81,16 +88,13 @@ class Ajax {
 	}
 
 	public function update_lead() {
+
 		check_ajax_referer( 'nonce', 'nonce' );
-
-		$response = [
-			'status'  => 0,
-			'message' => __( 'Unauthorized!', 'thrail-crm' )
-		];
-
-		if ( !wp_verify_nonce( $_POST[ 'nonce' ], 'nonce' ) ) {
-			wp_die( 'Nonce verification failed!' );
-		}
+        
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'nonce' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid nonce', 'thrail-crm' ) ] );
+            return;
+        }
 
 		$lead_id 	= isset( $_POST[ 'id' ] ) ? intval( $_POST[ 'id' ] ) : 0;
 		$name 		= isset( $_POST[ 'name' ] ) ? sanitize_text_field( $_POST[ 'name' ] ) : '';
