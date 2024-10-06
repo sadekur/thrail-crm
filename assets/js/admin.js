@@ -1,80 +1,79 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 	/*Delete Leads*/
-	$('.delete-lead').on('click', function(e) {
+	$(".delete-lead").on("click", function (e) {
 		e.preventDefault();
-		var id = $(this).data('id');
+		var id = $(this).data("id");
 
 		$.ajax({
 			url: THRAIL.ajaxurl,
 			method: "POST",
 			data: {
-				action: 'delete_lead',
-				id: id
+				action: "delete_lead",
+				id: id,
+				nonce: THRAIL.nonce,
 			},
-			dataType: 'JSON',
-			success: function(response) {
+			dataType: "JSON",
+			success: function (response) {
 				alert(response.data.message);
-				 location.reload();
+				location.reload();
 			},
-			error: function(response) {
+			error: function (response) {
 				console.log(response);
-			}
+			},
 		});
-
 	});
 
 	/*Edit Leads*/
-	var edit_lead_modal = $('#edit_lead');
+	var edit_lead_modal = $("#edit_lead");
 	edit_lead_modal.dialog({
 		autoOpen: false,
 		height: 300,
 		width: 350,
 		modal: true,
 		buttons: {
-			"Save changes": function() {
+			"Save changes": function () {
 				updateLead();
 			},
-			Cancel: function() {
+			Cancel: function () {
 				$(this).dialog("close");
-			}
-		}
+			},
+		},
 	});
 
-	$(document).on('click', '.edit-lead', function(e) {
+	$(document).on("click", ".edit-lead", function (e) {
 		e.preventDefault();
-		var $currentRow = $(this).closest('tr');
+		var $currentRow = $(this).closest("tr");
 
-		$('#lead_id').val($(this).data('id'));
-		$('#lead_name').val($currentRow.find('.name-column').text());
-		$('#lead_email').val($currentRow.find('.email-column').text());
-		edit_lead_modal.dialog('open');
+		$("#lead_id").val($(this).data("id"));
+		$("#lead_name").val($currentRow.find(".name-column").text());
+		$("#lead_email").val($currentRow.find(".email-column").text());
+		edit_lead_modal.dialog("open");
 	});
 
 	function updateLead() {
 		var postData = {
-			action: 'update_lead',
-			id: $('#lead_id').val(),
-			name: $('#lead_name').val(),
-			email: $('#lead_email').val(),
-			nonce: THRAIL.nonce
+			action: "update_lead",
+			id: $("#lead_id").val(),
+			name: $("#lead_name").val(),
+			email: $("#lead_email").val(),
+			nonce: THRAIL.nonce,
 		};
 
 		$.ajax({
 			url: THRAIL.ajaxurl,
 			method: "POST",
 			data: postData,
-			success: function(response) {
+			success: function (response) {
 				if (response.success) {
-					alert('Lead updated successfully');
+					alert("Lead updated successfully");
 					location.reload();
 				} else {
-					alert('Error: ' + response.data.message);
+					alert("Error: " + response.data.message);
 				}
 			},
-			error: function(xhr, status, error) {
-				alert('AJAX error: ' + error);
-			}
+			error: function (xhr, status, error) {
+				alert("AJAX error: " + error);
+			},
 		});
 	}
-
 });
