@@ -17,14 +17,5 @@ Trait Helper {
 			<input type="submit" value="Export to CSV" class="button button-primary">
 		</form>
 		<?php
-	}
-
-	public function send_congratulatory_email( $name, $email ) {
-	    $subject = "Congratulations on subscribing!";
-	    $message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
-	    $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
-
-	    wp_mail( $email, $subject, $message, $headers );
-	}
-	
+	}	
 }
