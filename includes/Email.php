@@ -1,26 +1,28 @@
 <?php
-
 namespace Thrail\Crm;
-require_once __DIR__ . '/../classes/Trait.php';
+
 class Email {
-	use Helper;
-	function __construct() {
-		add_action( 'thrail_crm_send_follow_up_email', [ $this, 'send_follow_up_email' ] );
-	}
+    public function __construct() {
+        add_action( 'thrail_send_followup_email', [ $this, 'send_followup_email' ], 10, 2 );
+    }
+    public function send_congratulatory_email( $name, $email ) {
+        $subject = "Congratulations on subscribing!";
+        $message = "Hi {$name},\n\nThank you for subscribing to our newsletter!";
+        $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
+        wp_mail( $email, $subject, $message, $headers );
+        $time_sent = time();
+        set_transient( 'congratulatory_email_sent_time_' . $email, $time_sent, HOUR_IN_SECONDS );
+        if ( ! wp_next_scheduled( 'thrail_send_followup_email', [ $name, $email ] ) ) {
+            wp_schedule_single_event( $time_sent + HOUR_IN_SECONDS, 'thrail_send_followup_email', [ $name, $email ] );
+        }
+    }
 
-	public function handle_new_subscription( $name, $email ) {
-		// $this->send_congratulatory_email( $name, $email );
-		$args = [ 'name' => $name, 'email' => $email ];
-		wp_schedule_single_event( time() + HOUR_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
-	}
-
-
-	public function send_follow_up_email( $args ) {
-		$subject = "Reminder: Explore More Features!";
-		$message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
-		$headers = ['Content-Type: text/plain; charset=UTF-8'];
-
-		wp_mail( $args[ 'email' ], $subject, $message, $headers );
-	}
-
+    public function send_followup_email( $name, $email ) {
+        $subject = "Follow-up: We're glad to have you!";
+        $message = "Hi {$name},\n\nIt's been a MINUTE since you subscribed! We just wanted to follow up and say thanks again.";
+        $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
+        wp_mail( $email, $subject, $message, $headers );
+        wp_clear_scheduled_hook( 'thrail_send_followup_email', [ $name, $email ] );
+        delete_transient( 'congratulatory_email_sent_time_' . $email );
+    }
 }
