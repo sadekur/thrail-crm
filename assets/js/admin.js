@@ -76,4 +76,20 @@ jQuery(document).ready(function ($) {
 			},
 		});
 	}
+
+	$("#thrail-crm-email-settings-form").on("submit", function (e) {
+		e.preventDefault();
+		var formData = $(this).serialize();
+		$.ajax({
+			url: THRAIL.rest_base + "/update-email-settings/",
+			method: "POST",
+			data: formData,
+			success: function (response) {
+				alert(response);
+			},
+			error: function (response) {
+				alert("Error updating settings");
+			},
+		});
+	});
 });
