@@ -23,6 +23,11 @@ class RestAPI {
                 ]
             ]
         ] );
+		register_rest_route( 'thrail-crm/v1', '/update-email-settings/', [
+			'methods' => 'POST',
+			'callback' => [ $this, 'handle_email_settings_update' ],
+			'permission_callback' => '__return_true',
+		]);
     }
 
     public function handle_form_submission( $request ) {
@@ -51,8 +56,27 @@ class RestAPI {
             $this->email->send_congratulatory_email( $name, $email );
             return new \WP_REST_Response( [ 'message' => 'Thank you for subscribing!' ], 200 );
         } else {
-            return new \WP_Error( 'db_error', 'Failed to register. Please try again.', [ 'status' => 500 ] );
+            return new \WP_Error( 'db_error', 'Failed to register. Please t	ry again.', [ 'status' => 500 ] );
         }
     }
-}
 
+	public function handle_email_settings_update( $request ) {
+		// check_ajax_referer( 'nonce', 'nonce' );
+		// $response = [
+		// 	 'status'	=> 0,
+		// 	 'message'	=>__( 'Unauthorized!', 'thrail-crm' )
+		// ];
+		// if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'nonce' ) ) {
+        //     wp_send_json_error( [ 'message' => __( 'Invalid nonce', 'thrail-crm' ) ] );
+        //     return;
+        // }
+		$options = [
+			'congratulatory_subject' 	=> sanitize_text_field( $request->get_param( 'congratulatory_subject' ) ),
+			'congratulatory_message' 	=> sanitize_textarea_field( $request->get_param( 'congratulatory_message' )) ,
+			'followup_subject' 			=> sanitize_text_field( $request->get_param( 'followup_subject' ) ),
+			'followup_message' 			=> sanitize_textarea_field( $request->get_param( 'followup_message' ) )
+		];
+		update_option( 'thrail_crm_email_settings', $options );
+		return new \WP_REST_Response( 'Settings updated successfully', 200 );
+	}
+}
