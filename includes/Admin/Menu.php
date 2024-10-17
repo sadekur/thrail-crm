@@ -55,16 +55,16 @@ class Menu {
 	}
 
 	public function crm_page() {
-		echo '<div class="wrap"><h1 class="wp-heading-inline">Leads</h1>';
+		echo '<div class="thrail-wrap"><h1 class="wp-heading-inline">Leads</h1>';
 		$this->render_filters();
 		$this->leads_list_table->prepare_items();
 		$this->leads_list_table->display();
 		echo '<div class="main">';
 		echo '<div id="edit_lead" title="Edit Lead" style="display:none;">';
 		echo '<form id="edit_lead_form">';
-		echo '<label>Name:</label>';
+		echo '<label for="lead_name">Name:</label>';
 		echo '<input type="text" id="lead_name" name="name"><br><br>';
-		echo '<label for="leadEmail">Email:</label>';
+		echo '<label for="lead_email">Email:</label>';
 		echo '<input type="email" id="lead_email" name="email">';
 		echo '<input type="hidden" id="lead_id" name="id">';
 		echo '</form>';
@@ -80,7 +80,7 @@ class Menu {
 	}
 
 	public function email_logs_page() {
-	    echo '<div class="wrap"><h1>Email Logs</h1>';
+	    echo '<div class="thrail-wrap"><h1>Email Logs</h1>';
 	    $this->email_logs_list_table->prepare_items();
 	    $this->email_logs_list_table->display();
 	    echo '</div>';
@@ -93,32 +93,29 @@ class Menu {
 			'followup_subject' => 'Follow-up: We\'re glad to have you!',
 			'followup_message' => "Hi {name},\n\nIt's been a minute since you subscribed! We just wanted to follow up and say thanks again."
 		];
-		$options = get_option('thrail_crm_email_settings', $defaults );
+		$options = get_option('thrail_crm_email_settings', $defaults);
 	
-		?>
-		<div class="wrap">
-			<h1>Email Settings</h1>
-			<form id="thrail-crm-email-settings-form" method="post" action="javascript:void(0);">
-				<h2>Congratulatory Email</h2>
-				<label for="congratulatory_subject">Subject:</label>
-				<input type="text" id="congratulatory_subject" name="congratulatory_subject" value="<?php echo esc_attr($options['congratulatory_subject']); ?>">
-				<br><br>
-				<label for="congratulatory_message">Message:</label>
-				<textarea id="congratulatory_message" name="congratulatory_message"><?php echo esc_textarea($options['congratulatory_message']); ?></textarea>
-				
-				<h2>Follow-up Email</h2>
-				<label for="followup_subject">Subject:</label>
-				<input type="text" id="followup_subject" name="followup_subject" value="<?php echo esc_attr($options['followup_subject']); ?>">
-				<br><br>
-				<label for="followup_message">Message:</label>
-				<textarea id="followup_message" name="followup_message"><?php echo esc_textarea($options['followup_message']); ?></textarea>
-				<br><br>
-				<input type="submit" value="Save Settings" class="button-primary">
-			</form>
-		</div>
-		<?php
+		echo '<div class="thrail-wrap thrail-form">
+            <h1>Email Settings</h1>
+            <form id="thrail-crm-email-settings-form" method="post" action="javascript:void(0);">
+                <h2>Congratulatory Email</h2>
+                <label for="congratulatory_subject">Subject:</label>
+                <input type="text" id="congratulatory_subject" name="congratulatory_subject" value="' . esc_attr($options['congratulatory_subject']) . '">
+                <br><br>
+                <label for="congratulatory_message">Message:</label>
+                <textarea id="congratulatory_message" name="congratulatory_message">' . esc_textarea($options['congratulatory_message']) . '</textarea>
+                
+                <h2>Follow-up Email</h2>
+                <label for="followup_subject">Subject:</label>
+                <input type="text" id="followup_subject" name="followup_subject" value="' . esc_attr($options['followup_subject']) . '">
+                <br><br>
+                <label for="followup_message">Message:</label>
+                <textarea id="followup_message" name="followup_message">' . esc_textarea($options['followup_message']) . '</textarea>
+                <br><br>
+                <input type="submit" value="Save Settings" class="button-primary">
+            </form>
+          </div>';
 	}
-	
 	public function handle_csv_export() {
 	     if ( isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === 'export_csv' && check_admin_referer( 'export_csv', 'csv_nonce' ) ) {
             $this->leads_list_table = new Leads_List_Table();
