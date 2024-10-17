@@ -36,6 +36,12 @@ class Menu {
 			'thrail-crm-email-logs', 
 			[ $this, 'email_logs_page' ]
 		);
+		$send_email_hook = add_submenu_page(
+			'thrail-crm', 'Send Emails', 
+			'Send Emails', 'manage_options', 
+			'thrail-crm-send-emails', 
+			[ $this, 'send_emails_page' ]
+		);
 
     	add_action( "load-$email_hook", [ $this, 'init_email_logs_table' ] );
 	}
@@ -79,6 +85,40 @@ class Menu {
 	    $this->email_logs_list_table->display();
 	    echo '</div>';
 	}
+
+	public function send_emails_page() {
+		$defaults = [
+			'congratulatory_subject' => 'Congratulations on subscribing!',
+			'congratulatory_message' => "Hi {name},\n\nThank you for subscribing to our newsletter!",
+			'followup_subject' => 'Follow-up: We\'re glad to have you!',
+			'followup_message' => "Hi {name},\n\nIt's been a minute since you subscribed! We just wanted to follow up and say thanks again."
+		];
+		$options = get_option('thrail_crm_email_settings', $defaults );
+	
+		?>
+		<div class="wrap">
+			<h1>Email Settings</h1>
+			<form id="thrail-crm-email-settings-form" method="post" action="javascript:void(0);">
+				<h2>Congratulatory Email</h2>
+				<label for="congratulatory_subject">Subject:</label>
+				<input type="text" id="congratulatory_subject" name="congratulatory_subject" value="<?php echo esc_attr($options['congratulatory_subject']); ?>">
+				<br><br>
+				<label for="congratulatory_message">Message:</label>
+				<textarea id="congratulatory_message" name="congratulatory_message"><?php echo esc_textarea($options['congratulatory_message']); ?></textarea>
+				
+				<h2>Follow-up Email</h2>
+				<label for="followup_subject">Subject:</label>
+				<input type="text" id="followup_subject" name="followup_subject" value="<?php echo esc_attr($options['followup_subject']); ?>">
+				<br><br>
+				<label for="followup_message">Message:</label>
+				<textarea id="followup_message" name="followup_message"><?php echo esc_textarea($options['followup_message']); ?></textarea>
+				<br><br>
+				<input type="submit" value="Save Settings" class="button-primary">
+			</form>
+		</div>
+		<?php
+	}
+	
 	public function handle_csv_export() {
 	     if ( isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === 'export_csv' && check_admin_referer( 'export_csv', 'csv_nonce' ) ) {
             $this->leads_list_table = new Leads_List_Table();
