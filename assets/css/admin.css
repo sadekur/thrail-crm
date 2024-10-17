@@ -1,10 +1,135 @@
 .main {
-    position: relative;
-    height: auto;
-    width: 350px;
-    top: -485.75px;
-    left: 777.5px;
-    background-color: #fff;
-    padding: 10px;
+	position: relative;
+	height: auto;
+	width: 350px;
+	top: -485.75px;
+	left: 777.5px;
+	background-color: #fff;
+	padding: 10px;
 }
 
+.thrail-form {
+	background: #fff;
+	padding: 20px;
+	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	max-width: 600px;
+	margin: 20px auto;
+}
+.thrail-form h1,
+.thrail-form h2 {
+	color: #32373c;
+}
+.thrail-form label {
+	display: block;
+	margin-bottom: 8px;
+	color: #666;
+}
+.thrail-form input[type="text"],
+.thrail-form textarea {
+	width: 100%;
+	padding: 8px;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #32373c;
+	background-color: #fff;
+	border: 1px solid #ccd0d4;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+	border-radius: 3px;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.thrail-form input[type="text"]:focus,
+.thrail-form textarea:focus {
+	border-color: #007cba;
+	box-shadow: 0 0 0 1px #007cba;
+	outline: none;
+}
+.thrail-form input[type="submit"] {
+	background-color: #0073aa;
+	border-color: #006799;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799,
+		-1px 0 1px #006799;
+	padding: 12px 18px;
+	margin-top: 20px;
+	cursor: pointer;
+	border-radius: 3px;
+}
+.thrail-form input[type="submit"]:hover {
+	background-color: #008ec2;
+}
+
+/* CSV FORM  */
+
+.thrail-filter-forms {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+	background-color: #f1f1f1;
+	margin-bottom: 20px;
+	border-radius: 5px;
+}
+.thrail-filter-forms form {
+	display: flex;
+	align-items: center;
+	margin: 0;
+}
+.thrail-filter-forms input[type="text"] {
+	margin-right: 10px;
+	line-height: 28px;
+	height: 30px;
+	border: 1px solid #ccc;
+}
+.thrail-filter-forms input[type="submit"] {
+	line-height: 28px;
+	height: 30px;
+	text-align: center;
+	background-color: #007cba;
+	color: #ffffff;
+	border: none;
+	padding: 0 15px;
+	cursor: pointer;
+	border-radius: 3px;
+}
+.thrail-filter-forms input[type="submit"]:hover {
+	background-color: #005a9c;
+}
+
+.thrail-wrap {
+	background: #fff;
+	padding: 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin-top: 20px;
+	border-radius: 5px;
+}
+.main {
+	margin-top: 20px;
+	background-color: #f9f9f9;
+	padding: 20px;
+	border-radius: 5px;
+}
+#edit_lead_form {
+	display: flex;
+	flex-direction: column;
+	max-width: 400px;
+}
+#edit_lead_form label {
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #333;
+}
+#edit_lead_form input[type="text"],
+#edit_lead_form input[type="email"] {
+	padding: 8px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+#edit_lead_form input[type="text"]:focus,
+#edit_lead_form input[type="email"]:focus {
+	border-color: #007cba;
+	box-shadow: 0 0 0 1px #007cba;
+	outline: none;
+}
