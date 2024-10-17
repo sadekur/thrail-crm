@@ -81,7 +81,7 @@ class Assets {
 		wp_enqueue_style( 'thrail-style' );
 	}
 
-	public function register_admin_assets() {
+	public function register_admin_assets($hook_suffix) {
 		$scripts 	= $this->get_scripts();
 		$styles 	= $this->get_styles();
 
