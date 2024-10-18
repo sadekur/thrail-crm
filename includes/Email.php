@@ -22,7 +22,7 @@ class Email {
         $time_sent = time();
         set_transient( 'congratulatory_email_sent_time_' . $email, $time_sent, HOUR_IN_SECONDS );
         if ( ! wp_next_scheduled( 'thrail_send_followup_email', [ $name, $email ] ) ) {
-            wp_schedule_single_event( $time_sent + MINUTE_IN_SECONDS, 'thrail_send_followup_email', [ $name, $email ] );
+            wp_schedule_single_event( $time_sent + HOUR_IN_SECONDS, 'thrail_send_followup_email', [ $name, $email ] );
         }
     }
 

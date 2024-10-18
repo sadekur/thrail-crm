@@ -16,6 +16,7 @@ class Menu {
 	function __construct() {
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 		add_action( 'admin_init', [ $this, 'handle_csv_export' ] );
+		add_action( 'admin_footer', [ $this, 'optin_footer' ] );
 	}
 
 	public function admin_menu() {
@@ -97,7 +98,7 @@ class Menu {
 	
 		echo '<div class="thrail-wrap thrail-form">
             <h1>Email Settings</h1>
-            <form id="thrail-crm-email-settings-form" method="post" action="javascript:void(0);">
+            <form id="thrail-crm-email-settings-form" method="post">
                 <h2>Congratulatory Email</h2>
                 <label for="congratulatory_subject">Subject:</label>
                 <input type="text" id="congratulatory_subject" name="congratulatory_subject" value="' . esc_attr($options['congratulatory_subject']) . '">
@@ -123,5 +124,11 @@ class Menu {
             $this->leads_list_table->export_to_csv();
             exit;
         }
+	}
+
+	public function optin_footer() {
+		echo '<div class="loader-container" id="formLoader" style="display: none;">' .
+		'<img src="' . esc_url( THRAIL_CRM_ASSETS . '/img/loader.gif' ) . '" alt="' . esc_attr( 'Loading...' ) . '">' .
+		'</div>';
 	}
 }

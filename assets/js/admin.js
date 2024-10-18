@@ -79,16 +79,20 @@ jQuery(document).ready(function ($) {
 
 	$("#thrail-crm-email-settings-form").on("submit", function (e) {
 		e.preventDefault();
+		var loader = $("#formLoader");
+		loader.show();
 		var formData = $(this).serialize();
 		$.ajax({
 			url: THRAIL.rest_base + "/update-email-settings/",
 			method: "POST",
 			data: formData,
 			success: function (response) {
-				alert(response);
+				console.log(response);
+				loader.hide();
 			},
 			error: function (response) {
-				alert("Error updating settings");
+				console.log(response);
+				loader.hide();
 			},
 		});
 	});
