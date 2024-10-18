@@ -26,8 +26,8 @@ class Shortcode {
 	public function optin_footer() {
 		if (!is_admin()) {
 			echo '<div class="loader-container" id="formLoader" style="display: none;">' .
-			'<img src="' . THRAIL_CRM_ASSETS . '/img/loader.gif" alt="Loading...">' .
+			'<img src="' . esc_url( THRAIL_CRM_ASSETS . '/img/loader.gif' ) . '" alt="' . esc_attr( 'Loading...' ) . '">' .
 			'</div>';
 		}
-	}
+	}	
 }

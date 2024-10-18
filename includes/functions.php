@@ -25,39 +25,11 @@ if( ! function_exists( 'thrail_crm_activate' ) ) :
 		dbDelta($sql);
 	}
 endif;
-
-// if ( ! function_exists( 'handle_new_subscription' ) ):
-// 	function handle_new_subscription($name, $email) {
-// 	    send_congratulatory_email( $name, $email );
-// 	    $args = [ 'name' => $name, 'email' => $email ];
-// 	    wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'thrail_crm_send_follow_up_email', $args );
-// 	}
-// endif;
-
-// if ( ! function_exists( 'send_congratulatory_email' ) ):
-// 	function send_congratulatory_email( $name, $email ) {
-// 	    $subject = "Congratulations on subscribing!";
-// 	    $message = "Hi {$name},\n\nThank you for subscribing to our newsletter! We look forward to bringing you the latest updates and information.\n\nBest regards,\nThe Thrail CRM Team";
-// 	    $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
-
-// 	    wp_mail( $email, $subject, $message, $headers );
-// 	}
-// endif;
-
-// add_action( 'thrail_crm_send_follow_up_email', 'send_follow_up_email' );
-
-// function send_follow_up_email($args) {
-//     error_log('Attempting to send follow-up email to: ' . $args['email']);
-    
-//     $subject = "Reminder: Explore More Features!";
-//     $message = "Hi {$args['name']},\n\nJust a reminder that you signed up recently! Don't forget to check out all our features and offerings.\n\nBest regards,\nThe Thrail CRM Team";
-//     $headers = ['Content-Type: text/plain; charset=UTF-8'];
-
-//     if (wp_mail($args['email'], $subject, $message, $headers)) {
-//         error_log('Follow-up email sent successfully to: ' . $args['email']);
-//     } else {
-//         error_log('Failed to send follow-up email to: ' . $args['email']);
-//     }
-// }
-
-
+if( ! function_exists( 'get_log_details_by_id' ) ) :
+function get_log_details_by_id($log_id) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'wp_thrail_crm_leads';
+    $log_details = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $log_id));
+    return $log_details;
+}
+endif;

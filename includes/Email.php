@@ -12,15 +12,15 @@ class Email {
         ];
         $options = get_option('thrail_crm_email_settings', $defaults);
 
-        $subject = $options['congratulatory_subject'];
-        $message = str_replace('{name}', $name, $options['congratulatory_message']);
-        $message = str_replace('\n', "\n", $message);
-        $headers = ['Content-Type: text/plain; charset=UTF-8'];
+        $subject = $options[ 'congratulatory_subject' ];
+        $message = str_replace( '{name}', $name, $options[ 'congratulatory_message' ] );
+        $message = str_replace( '\n', "\n", $message );
+        $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
 
         wp_mail( $email, $subject, $message, $headers );
 
         $time_sent = time();
-        set_transient( 'congratulatory_email_sent_time_' . $email, $time_sent, MINUTE_IN_SECONDS );
+        set_transient( 'congratulatory_email_sent_time_' . $email, $time_sent, HOUR_IN_SECONDS );
         if ( ! wp_next_scheduled( 'thrail_send_followup_email', [ $name, $email ] ) ) {
             wp_schedule_single_event( $time_sent + MINUTE_IN_SECONDS, 'thrail_send_followup_email', [ $name, $email ] );
         }
@@ -34,10 +34,10 @@ class Email {
         ];
         $options = get_option('thrail_crm_email_settings', $defaults);
 
-        $subject = $options['followup_subject'];
-        $message = str_replace('{name}', $name, $options['followup_message']);
-        $message = str_replace('\n', "\n", $message);
-        $headers = ['Content-Type: text/plain; charset=UTF-8'];
+        $subject = $options[ 'followup_subject' ];
+        $message = str_replace( '{name}', $name, $options[ 'followup_message' ] );
+        $message = str_replace( '\n', "\n", $message );
+        $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
 
         wp_mail( $email, $subject, $message, $headers );
         wp_clear_scheduled_hook( 'thrail_send_followup_email', [ $name, $email ] );

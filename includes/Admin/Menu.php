@@ -80,7 +80,7 @@ class Menu {
 	}
 
 	public function email_logs_page() {
-	    echo '<div class="thrail-wrap"><h1>Email Logs</h1>';
+	    echo '<div class="thrail-wrap thrail-log-list"><h1>Email Logs</h1>';
 	    $this->email_logs_list_table->prepare_items();
 	    $this->email_logs_list_table->display();
 	    echo '</div>';
@@ -103,14 +103,14 @@ class Menu {
                 <input type="text" id="congratulatory_subject" name="congratulatory_subject" value="' . esc_attr($options['congratulatory_subject']) . '">
                 <br><br>
                 <label for="congratulatory_message">Message:</label>
-                <textarea id="congratulatory_message" name="congratulatory_message">' . esc_textarea($options['congratulatory_message']) . '</textarea>
+                <textarea id="congratulatory_message" rows="5" name="congratulatory_message">' . esc_textarea($options['congratulatory_message']) . '</textarea>
                 
                 <h2>Follow-up Email</h2>
                 <label for="followup_subject">Subject:</label>
                 <input type="text" id="followup_subject" name="followup_subject" value="' . esc_attr($options['followup_subject']) . '">
                 <br><br>
                 <label for="followup_message">Message:</label>
-                <textarea id="followup_message" name="followup_message">' . esc_textarea($options['followup_message']) . '</textarea>
+                <textarea id="followup_message" rows="5" name="followup_message">' . esc_textarea($options['followup_message']) . '</textarea>
                 <br><br>
                 <input type="submit" value="Save Settings" class="button-primary">
             </form>
