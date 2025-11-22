@@ -1,0 +1,68 @@
+name: Deploy Password Less Login to WordPress SVN
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    name: Deploy to WordPress SVN
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader -n
+
+      - name: Get Plugin Version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Install Subversion
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Checkout WordPress SVN Repo
+        run: |
+          svn checkout --depth=immediates "https://plugins.svn.wordpress.org/password-less-login/" svn
+          cd svn
+          svn update --set-depth=infinity trunk assets tags
+
+      - name: Sync Plugin Files to SVN trunk
+        run: |
+          rsync -rc --delete \
+            --exclude=".git*" \
+            --exclude=".github" \
+            --exclude=".gitignore" \
+            --exclude="composer.json" \
+            --exclude="composer.lock" \
+            --exclude="webpack.config.js" \
+            --exclude="svn-assets" \
+            --exclude="svn" \
+            ./ svn/trunk/
+
+      - name: Sync WordPress.org Assets to SVN
+        run: |
+          if [ -d svn-assets ]; then
+            rsync -rc --delete svn-assets/ svn/assets/
+          fi
+
+      - name: Commit Plugin Files to Trunk
+        run: |
+          cd svn
+          svn add --force trunk assets
+          svn status | grep '^!' | awk '{print $2}' | xargs -r svn delete
+           svn commit -m "Deploy Password Less Login version ${VERSION}" \
+             --username "${{ secrets.PLL_PRIVATE_KEY }}" \
+             --password "${{ secrets.PLL_SVN_PASSWORD }}" \
+             --no-auth-cache --non-interactive
+
+      - name: Tag Release in SVN
+        run: |
+          cd svn
+          svn copy trunk tags/${VERSION}
+           svn commit -m "Tagging Password Less Login version ${VERSION}" \
+             --username "${{ secrets.PLL_PRIVATE_KEY }}" \
+             --password "${{ secrets.PLL_SVN_PASSWORD }}" \
+             --no-auth-cache --non-interactive
