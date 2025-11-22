@@ -54,8 +54,8 @@ jobs:
           svn add --force trunk assets
           svn status | grep '^!' | awk '{print $2}' | xargs -r svn delete
            svn commit -m "Deploy Password Less Login version ${VERSION}" \
-             --username "${{ secrets.PLL_PRIVATE_KEY }}" \
-             --password "${{ secrets.PLL_SVN_PASSWORD }}" \
+             --username "${{ secrets.TC_PRIVATE_KEY }}" \
+             --password "${{ secrets.TC_SVN_PASSWORD }}" \
              --no-auth-cache --non-interactive
 
       - name: Tag Release in SVN
@@ -63,6 +63,6 @@ jobs:
           cd svn
           svn copy trunk tags/${VERSION}
            svn commit -m "Tagging Password Less Login version ${VERSION}" \
-             --username "${{ secrets.PLL_PRIVATE_KEY }}" \
-             --password "${{ secrets.PLL_SVN_PASSWORD }}" \
+             --username "${{ secrets.TC_PRIVATE_KEY }}" \
+             --password "${{ secrets.TC_SVN_PASSWORD }}" \
              --no-auth-cache --non-interactive
