@@ -1,4 +1,4 @@
-name: Deploy Password Less Login to WordPress SVN
+name: Deploy Thrail CRM to WordPress SVN
 on:
   push:
     tags:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Checkout WordPress SVN Repo
         run: |
-          svn checkout --depth=immediates "https://plugins.svn.wordpress.org/password-less-login/" svn
+          svn checkout --depth=immediates "https://plugins.svn.wordpress.org/trail-crm/" svn
           cd svn
           svn update --set-depth=infinity trunk assets tags
 

@@ -3,7 +3,7 @@
  * Plugin Name:      Thrail CRM
  * Plugin URI:        https://srs.com
  * Description:       A plugin Thrail CRM for Customert.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 5.9
  * Requires PHP:      7.2
  * Author:            SRS
